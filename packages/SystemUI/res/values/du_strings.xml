@@ -85,4 +85,11 @@
     <string name="quick_settings_navigation_default">Stock</string>
     <string name="quick_settings_navigation_disabled">Disabled</string>
 
+    <!-- Battery Styles -->
+    <string name="battery_style_title">Battery style</string>
+    <string name="battery_style_summary">Change the look of the icon in the statusbar</string>
+    <string name="battery_style_port">Portrait</string>
+    <string name="battery_style_land">Landscape</string>
+    <string name="battery_style_circle">Circle</string>
+
 </resources>

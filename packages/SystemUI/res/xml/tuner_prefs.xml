@@ -30,6 +30,14 @@
         android:summary="@string/du_logo_summary"
         android:defaultValue="false" />
 
+    <ListPreference
+        android:key="battery_style"
+        android:title="@string/battery_style_title"
+        android:summary="@string/battery_style_summary"
+        android:entries="@array/battery_style_entries"
+        android:entryValues="@array/battery_style_values"
+        android:persistent="false" />
+
     <PreferenceCategory
         android:key="hide_statusbar_items"
         android:title="@string/statusbar_tuner_category_title">
