@@ -4150,6 +4150,14 @@ public final class Settings {
         public static final String MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD =
                 "mute_annoying_notifications_threshold";
 
+
+	/**
+         * Three Finger Gesture from Oppo
+	 *
+         * @hide
+         */
+        public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
+
         /**
          * Whether to display roaming indicator for roaming signal connection
          * @hide
