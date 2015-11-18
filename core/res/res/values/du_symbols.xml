@@ -53,6 +53,9 @@
   <!-- Notification info -->
   <java-symbol type="color" name="notification_info_button_text" />
 
+  <java-symbol type="drawable" name="ic_audio_notification_new" />
+  <java-symbol type="drawable" name="ic_audio_notification_mute_new" />
+
   <!-- IMS -->
   <java-symbol type="string" name="config_optionalPackageVerifierName" />
   <java-symbol type="integer" name="config_sms_authorization_timeout_ms" />
