@@ -32,7 +32,7 @@
     <color name="qs_edit_item_decoration_bg">@*android:color/secondary_device_default_settings_light</color>
 
     <!-- Power save warning color -->
-    <color name="powersave_warning_color">#ffff0000</color> <!-- red -->
+    <color name="powersave_warning_color">#ff8e0101</color> <!-- sexy red -->
 
     <!-- Screen pinning colors -->
     <color name="screen_pinning_background_color">@*android:color/accent_device_default_light</color>
