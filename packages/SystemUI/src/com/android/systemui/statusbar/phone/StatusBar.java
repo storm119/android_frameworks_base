@@ -478,9 +478,6 @@ public class StatusBar extends SystemUI implements DemoMode,
      */
     private boolean mAlwaysExpandNonGroupedNotification;
 
-    // quick settings
-    private int mQsLayoutColumns;
-
     // settings
     private QSPanel mQSPanel;
     private QuickStatusBarHeader mQuickStatusBarHeader;
@@ -6419,6 +6416,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_TICKER_ANIMATION_MODE),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_TILE_TITLE_VISIBILITY),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -6474,13 +6474,15 @@ public class StatusBar extends SystemUI implements DemoMode,
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_TICKER_ANIMATION_MODE))) {
                 updateTickerAnimation();
+            } else if (uri.equals(Settings.Secure.getUriFor(Settings.Secure.QS_LAYOUT_COLUMNS)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.QS_TILE_TITLE_VISIBILITY))) {
+                updateQsPanelResources();
             }
         }
 
         public void update() {
             setStatusBarWindowViewOptions();
             setHeadsUpBlacklist();
-            setQsLayoutColumns();
             setForceAmbient();
             setFpToQuickPulldownQs();
             setFpToDismissNotifications();
@@ -6489,6 +6491,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             setStatusBarOptions();
             updateRecentsMode();
             updateTickerAnimation();
+            updateQsPanelResources();
         }
     }
 
@@ -6514,12 +6517,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         if (mQSPanel != null) {
             mQSPanel.updateSettings();
         }
-    }
-
-    private void setQsLayoutColumns() {
-        ContentResolver resolver = mContext.getContentResolver();
-        mQsLayoutColumns = Settings.Secure.getIntForUser(resolver,
-                Settings.Secure.QS_LAYOUT_COLUMNS, 3, mCurrentUserId);
     }
 
     private void setStatusBarWindowViewOptions() {
@@ -6621,6 +6618,12 @@ public class StatusBar extends SystemUI implements DemoMode,
                 intent.setPackage("com.android.settings");
                 mContext.sendBroadcastAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
             }
+        }
+    };
+
+    private void updateQsPanelResources() {
+        if (mQSPanel != null) {
+            mQSPanel.updateResources();
         }
     };
 
