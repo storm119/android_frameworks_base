@@ -129,4 +129,7 @@
   
   <!-- sensor block per-package -->
   <java-symbol type="array" name="config_blockPackagesSensorDrain" />
+  
+  <!-- Dynamic Navbar -->
+  <java-symbol type="color" name="input_method_navigation_guard_dynamic" />
 </resources>
