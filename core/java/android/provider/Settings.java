@@ -4629,6 +4629,12 @@ public final class Settings {
                 "notification_guts_kill_app_button";
 
         /**
+         * Wheter to show heads up only for dialer and sms apps
+         * @hide
+         */
+        public static final String LESS_BORING_HEADS_UP = "less_boring_heads_up";
+
+        /**
          * Whether to change the transparency of the qs panel
          * @hide
          */
