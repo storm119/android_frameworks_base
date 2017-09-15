@@ -152,4 +152,5 @@
     <string name="quick_settings_smart_pixels">Smart pixels</string>
     <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
 
+    <string name="recents_app_killed">App killed</string>
 </resources>
