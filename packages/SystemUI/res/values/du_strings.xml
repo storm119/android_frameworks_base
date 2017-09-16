@@ -25,6 +25,9 @@
 
     <!-- Roaming indicator -->
     <string name="roaming_indicator_title">Roaming</string>
+    
+    <!-- VoLTE icon switch -->
+    <string name="status_bar_volte">VoLTE</string>
 
     <!-- DU logo -->
     <string name="du_logo_title">DU swag</string>
