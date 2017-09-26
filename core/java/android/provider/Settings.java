@@ -4306,6 +4306,13 @@ public final class Settings {
         public static final String  RECENTS_CLEAR_ALL_LOCATION = "recents_clear_all_location";
 
         /**
+         * Indicates whether ANBI (Accidental navigation button interaction) is enabled.
+         *
+         * @hide
+         */
+        public static final String ANBI_ENABLED = "anbi_enabled";
+
+        /**
          * Which applications to disable heads up notifications for
          *
          * @hide
