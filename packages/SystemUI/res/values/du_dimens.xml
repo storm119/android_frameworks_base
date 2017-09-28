@@ -63,4 +63,7 @@
 
    <dimen name="qs_corner_content_padding">8dp</dimen>
 
+    <!-- QS tile scroller -->
+    <dimen name="qs_scroller_margin">8dp</dimen>
+
 </resources>
