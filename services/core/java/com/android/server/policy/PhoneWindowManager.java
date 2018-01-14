@@ -6358,6 +6358,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final boolean homeKey = keyCode == KeyEvent.KEYCODE_HOME;
         final boolean menuKey = keyCode == KeyEvent.KEYCODE_MENU;
         final boolean backKey = keyCode == KeyEvent.KEYCODE_BACK;
+        final boolean assistKey = keyCode == KeyEvent.KEYCODE_ASSIST;
+        final boolean navBarKey = source == InputDevice.SOURCE_NAVIGATION_BAR;
 
         // If screen is off then we treat the case where the keyguard is open but hidden
         // the same as if it were open and in front.
@@ -6368,17 +6370,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                                                 isKeyguardShowingAndNotOccluded() :
                                                 mKeyguardDelegate.isShowing()));
 
+        if (mANBIHandler != null && mANBIEnabled && mANBIHandler.isScreenTouched()
+                && !navBarKey && (appSwitchKey || homeKey || menuKey || backKey || assistKey)) {
+            return 0;
+        }
+
         if (DEBUG_INPUT) {
             Log.d(TAG, "interceptKeyTq keycode=" + keyCode
                     + " interactive=" + interactive + " keyguardActive=" + keyguardActive
                     + " policyFlags=" + Integer.toHexString(policyFlags));
         }
         
-        if (mANBIHandler != null && mANBIEnabled && mANBIHandler.isScreenTouched()
-                && (appSwitchKey || homeKey || menuKey || backKey)) {
-            return 0;
-        }
-
         // Basic policy based on interactive state.
         final boolean isVolumeRockerWake = !isScreenOn()
                 && mVolumeRockerWake
