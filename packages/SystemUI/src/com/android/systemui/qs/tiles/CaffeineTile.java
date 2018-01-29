@@ -26,19 +26,19 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.PowerManager;
 import android.provider.Settings;
-
 import android.service.quicksettings.Tile;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
-
 import com.android.systemui.Prefs;
 import com.android.systemui.R;
-import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.qs.QSHost;
+import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
 
 /** Quick settings tile: Caffeine **/
 public class CaffeineTile extends QSTileImpl<BooleanState> {
+
+    private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_caffeine_on);
 
     private final PowerManager.WakeLock mWakeLock;
     private final Receiver mReceiver = new Receiver();
@@ -65,8 +65,17 @@ public class CaffeineTile extends QSTileImpl<BooleanState> {
     }
 
     @Override
-    public void handleSetListening(boolean listening) {
+    public CharSequence getTileLabel() {
+        return mContext.getString(R.string.quick_settings_caffeine_label);
     }
+
+    @Override
+    public int getMetricsCategory() {
+        return MetricsEvent.CUSTOM_QUICK_TILES;
+    }
+
+    @Override
+    public void handleSetListening(boolean listening) {}
 
     @Override
     public void handleClick() {
@@ -104,28 +113,21 @@ public class CaffeineTile extends QSTileImpl<BooleanState> {
             "com.android.settings", "com.android.settings.Settings$DisplaySettingsActivity"));
     }
 
-
-    @Override
-    public CharSequence getTileLabel() {
-        return mContext.getString(R.string.quick_settings_caffeine_label);
-    }
-
-    @Override
-    public int getMetricsCategory() {
-        return MetricsEvent.CUSTOM_QUICK_TILES;
-    }
-
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
+        if (state.slash == null) {
+            state.slash = new SlashState();
+        }
+        state.icon = mIcon;
         state.value = mWakeLock.isHeld();
         state.label = mContext.getString(R.string.quick_settings_caffeine_label);
         if (state.value) {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_caffeine_on);
+            state.slash.isSlashed = false;
             state.contentDescription =  mContext.getString(
                     R.string.accessibility_quick_settings_caffeine_on);
             state.state = Tile.STATE_ACTIVE;
         } else {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_caffeine_off);
+            state.slash.isSlashed = true;
             state.contentDescription =  mContext.getString(
                     R.string.accessibility_quick_settings_caffeine_off);
             state.state = Tile.STATE_INACTIVE;
