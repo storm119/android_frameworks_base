@@ -42,4 +42,7 @@
     <string name="custom_clock_styles" translatable="false">
         digital,digital_bold,sammy,sammy_bold,analog
     </string>
+
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Long press power button to interact</string>
 </resources>
