@@ -16,28 +16,28 @@
 
 package com.android.systemui.statusbar.policy;
 
+import com.android.systemui.Dependency;
+
 import android.app.StatusBarManager;
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.android.systemui.Dependency;
-
-public class ClockCenter extends Clock {
+public class ClockLeft extends Clock {
 
     private boolean mClockVisibleByPolicy = true;
     private boolean mClockVisibleByUser = true;
 
-    public ClockCenter(Context context) {
+    public ClockLeft(Context context) {
         this(context, null);
     }
 
-    public ClockCenter(Context context, AttributeSet attrs) {
+    public ClockLeft(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ClockCenter(Context context, AttributeSet attrs, int defStyle) {
+    public ClockLeft(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
@@ -47,15 +47,15 @@ public class ClockCenter extends Clock {
     }
 
     protected void updateClockVisibility() {
-        boolean visible = mClockStyle == STYLE_CLOCK_CENTER && mShowClock
+        boolean visible = mClockStyle == STYLE_CLOCK_LEFT && mShowClock
                 && mClockVisibleByPolicy && mClockVisibleByUser;
-        Dependency.get(IconLogger.class).onIconVisibility("center_clock", visible);
+        Dependency.get(IconLogger.class).onIconVisibility("left_clock", visible);
         setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     @Override
     public boolean isEnabled() {
-        return mClockStyle == STYLE_CLOCK_CENTER && mShowClock
+        return mClockStyle == STYLE_CLOCK_LEFT && mShowClock
                 && mClockVisibleByPolicy && mClockVisibleByUser;
     }
 
