@@ -24,7 +24,7 @@
     <color name="battery_level_good_color">#ff319111</color> <!-- green -->
 
     <!-- Power saver warning color -->
-    <color name="powersave_warning_color">ff8e0101</color><!-- rgb 0 0 0 -->
+    <color name="powersave_warning_color">#ff8e0101</color> <!-- sexy red -->
 
     <!-- Zen QS panel -->
     <color name="zen_qs_panel_close_button_color">@android:color/white</color>
