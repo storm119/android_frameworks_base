@@ -91,5 +91,5 @@
     <string name="battery_style_port">Portrait</string>
     <string name="battery_style_land">Landscape</string>
     <string name="battery_style_circle">Circle</string>
-    <string name="battery_style_dotted_circle">Dotted circle</string>
+
 </resources>
