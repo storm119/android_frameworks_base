@@ -19,9 +19,7 @@ import android.content.ContentResolver;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v14.preference.SwitchPreference;
-import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.Preference.OnPreferenceChangeListener;
 import android.support.v7.preference.PreferenceScreen;
 import android.support.v14.preference.PreferenceFragment;
 
@@ -31,17 +29,15 @@ import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.util.du.Utils;
 import com.android.systemui.R;
 
-public class TunerFragment extends PreferenceFragment implements OnPreferenceChangeListener {
+public class TunerFragment extends PreferenceFragment {
 
     private static final String TAG = "TunerFragment";
 
     private static final String KEY_SHOW_LTE_FOURGEE = "show_lte_fourgee";
     private static final String KEY_STATUS_BAR_LOGO = "status_bar_logo";
-    private static final String BATTERY_STYLE = "battery_style";
 
     private SwitchPreference mShowLteFourGee;
     private SwitchPreference mShowDuLogo;
-    private ListPreference mBatteryIconStyle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,11 +58,6 @@ public class TunerFragment extends PreferenceFragment implements OnPreferenceCha
         mShowDuLogo = (SwitchPreference) findPreference(KEY_STATUS_BAR_LOGO);
         mShowDuLogo.setChecked((Settings.System.getInt(resolver,
                 Settings.System.STATUS_BAR_LOGO, 0) == 1));
-
-        mBatteryIconStyle = (ListPreference) findPreference(BATTERY_STYLE);
-        mBatteryIconStyle.setValue(Integer.toString(Settings.Secure.getInt(resolver,
-                Settings.Secure.STATUS_BAR_BATTERY_STYLE, 0)));
-        mBatteryIconStyle.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -113,16 +104,5 @@ public class TunerFragment extends PreferenceFragment implements OnPreferenceCha
             return true;
         }
         return super.onPreferenceTreeClick(preference);
-    }
-
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference == mBatteryIconStyle) {
-            int value = Integer.valueOf((String) newValue);
-            Settings.Secure.putInt(getActivity().getContentResolver(),
-                    Settings.Secure.STATUS_BAR_BATTERY_STYLE, value);
-            return true;
-        }
-        return false;
     }
 }
