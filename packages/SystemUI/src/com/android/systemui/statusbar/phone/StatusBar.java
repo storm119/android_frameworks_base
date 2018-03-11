@@ -6568,8 +6568,8 @@ public class StatusBar extends SystemUI implements DemoMode,
         if (!isSlimRecentsEnabled()) {
             String currentIconPack = Settings.System.getStringForUser(mContext.getContentResolver(),
                 Settings.System.RECENTS_ICON_PACK, mCurrentUserId);
-            IconsHandler.getInstance(mContext).updatePrefs(currentIconPack);
             mRecents.resetIconCache();
+            mRecents.getIconsHandler().updatePrefs(currentIconPack);
         }
     }
 
@@ -6588,7 +6588,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mSlimRecents = null;
             }
         }
-        IconsHandler.getInstance(mContext).resetIconNormalizer();
         updateRecentsIconPack();
     }
 
