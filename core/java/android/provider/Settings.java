@@ -4575,6 +4575,12 @@ public final class Settings {
         public static final String RECENTS_ICON_PACK = "recents_icon_pack";
 
         /**
+         * Whether to show battery percent on ambient bottom
+         * @hide
+         */
+        public static final String AMBIENT_BATTERY_PERCENT = "ambient_battery_percent";
+
+        /**
          * Ticker animation
          * 0: Fade animation
          * 1: Scrolling ticker
