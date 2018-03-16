@@ -76,13 +76,17 @@ public class BatteryMeterView extends LinearLayout implements
     private final Context mContext;
     private final int mFrameColor;
 
+    private final int mEndPadding;
+
     private int mPercentStyle;
     private int mBatteryIconStyle;
     private boolean mLargeBatteryIcon;
     private boolean mAttached;
 
     private boolean mClockEnabled;
-    private int mClockStyle = 0; /*STYLE_CLOCK_RIGHT*/
+    private int mClockStyle = STYLE_CLOCK_RIGHT;
+    public static final int STYLE_CLOCK_RIGHT = 0;
+    public static final int STYLE_CLOCK_LEFT = 1;
 
     private boolean mCharging;
 
@@ -97,6 +101,7 @@ public class BatteryMeterView extends LinearLayout implements
     public BatteryMeterView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mContext = context;
+        Resources res = getResources();
 
         setOrientation(LinearLayout.HORIZONTAL);
         setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
@@ -116,6 +121,8 @@ public class BatteryMeterView extends LinearLayout implements
                 getResources().getDimensionPixelSize(R.dimen.status_bar_battery_icon_height));
         mlp.setMargins(0, 0, 0, getResources().getDimensionPixelOffset(R.dimen.battery_margin_bottom));
         addView(mBatteryIconView, mlp);
+
+        mEndPadding = res.getDimensionPixelSize(R.dimen.battery_level_padding_start);
 
         updateShowPercent();
 
@@ -239,6 +246,16 @@ public class BatteryMeterView extends LinearLayout implements
                 mDrawable.setShowPercent(false);
                 break;
         }
+        // Fix padding dinamically. It's safe to call this here because View.setPadding doesn't call a
+        // requestLayout() if values aren't different from previous ones
+        if (mBatteryPercentView != null) {
+            mBatteryPercentView.setPaddingRelative(0, 0,
+                    mBatteryIconStyle == BatteryMeterDrawableBase.BATTERY_STYLE_TEXT ? (isRightClock() ? mEndPadding : 0) : mEndPadding, 0);
+        }
+    }
+
+    private boolean isRightClock() {
+        return mClockEnabled && mClockStyle == STYLE_CLOCK_RIGHT;
     }
 
     @Override
@@ -281,10 +298,6 @@ public class BatteryMeterView extends LinearLayout implements
 
         mBatteryIconView.setLayoutParams(scaledLayoutParams);
         FontSizeUtils.updateFontSize(mBatteryPercentView, R.dimen.qs_time_expanded_size);
-        if (mBatteryPercentView != null) {
-            mBatteryPercentView.setPaddingRelative(0, 0, (mDrawable.getMeterStyle() == BatteryMeterDrawableBase.BATTERY_STYLE_TEXT ||
-                    (mClockEnabled && mClockStyle == 0)) ? endPadding : 0, 0);
-        }
     }
 
     @Override
