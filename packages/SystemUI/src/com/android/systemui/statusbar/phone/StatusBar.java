@@ -1560,20 +1560,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
     }
 
-    private void updateNotificationsOnOverlayChanged() {
-        ArrayList<Entry> activeNotifications = mNotificationData.getActiveNotifications();
-        for (int i = 0; i < activeNotifications.size(); i++) {
-            Entry entry = activeNotifications.get(i);
-            boolean exposedGuts = mNotificationGutsExposed != null
-                    && entry.row.getGuts() == mNotificationGutsExposed;
-            entry.row.onOverlayChanged();
-            if (exposedGuts) {
-                mNotificationGutsExposed = entry.row.getGuts();
-                bindGuts(entry.row, mGutsMenuItem);
-            }
-        }
-    }
-
     private void inflateSignalClusters() {
         if (mKeyguardStatusBar != null) reinflateSignalCluster(mKeyguardStatusBar);
     }
