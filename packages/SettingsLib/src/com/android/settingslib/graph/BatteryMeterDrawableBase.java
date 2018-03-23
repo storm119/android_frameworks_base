@@ -694,7 +694,7 @@ public class BatteryMeterDrawableBase extends Drawable {
         } else {
             // draw the percentage text
             if (!mCharging && !mPowerSaveEnabled && level > mCriticalLevel
-                    && (mShowPercent && !(mLevel == 100 && !SHOW_100_PERCENT))) {
+                    && (mShowPercent && mLevel != 100)) {
                 mTextPaint.setColor(mBatteryPaint.getColor());
                 pctText = String.valueOf(SINGLE_DIGIT_PERCENT ? (level/10) : level);
                 c.drawText(pctText, x, y, mTextPaint);

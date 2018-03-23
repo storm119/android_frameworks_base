@@ -4151,9 +4151,9 @@ public final class Settings {
                 "mute_annoying_notifications_threshold";
 
 
-	/**
+        /**
          * Three Finger Gesture from Oppo
-	 *
+         *
          * @hide
          */
         public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
