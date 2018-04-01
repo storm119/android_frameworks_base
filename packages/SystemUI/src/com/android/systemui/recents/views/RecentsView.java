@@ -18,15 +18,20 @@ package com.android.systemui.recents.views;
 
 import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
 
-import android.app.ActivityManager;
-import android.app.ActivityManager.MemoryInfo;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
+import android.app.ActivityManager;
+import android.app.ActivityManager.MemoryInfo;
 import android.app.ActivityOptions.OnAnimationStartedListener;
+import android.app.ActivityManager;
+import android.app.ActivityManager.MemoryInfo;
+import android.content.Context;
+import android.content.ContentResolver;
+import android.content.res.Resources;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
@@ -197,6 +202,7 @@ public class RecentsView extends FrameLayout {
         LayoutInflater inflater = LayoutInflater.from(context);
         mEmptyView = (TextView) inflater.inflate(R.layout.recents_empty, this, false);
         addView(mEmptyView);
+        mAm = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
 
         if (RecentsDebugFlags.Static.EnableStackActionButton) {
             if (mStackActionButton != null) {
@@ -246,8 +252,6 @@ public class RecentsView extends FrameLayout {
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
                 systemBarsStyle);
-
-        mAm = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
     }
 
     /**
@@ -502,12 +506,13 @@ public class RecentsView extends FrameLayout {
         mClearRecents.setVisibility(View.VISIBLE);
         mClearRecents.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EventBus.getDefault().send(new DismissAllTaskViewsEvent());
+            EventBus.getDefault().send(new DismissAllTaskViewsEvent());
+            updateMemoryStatus();
             }
         });
         mRecentListGestureDetector =
                 new ScaleGestureDetector(mContext,
-                        new PinchInGesture(mTaskStackView));
+                new PinchInGesture(mTaskStackView));
         super.onAttachedToWindow();
 
         mMemText = (TextView) ((View)getParent()).findViewById(R.id.recents_memory_text);
