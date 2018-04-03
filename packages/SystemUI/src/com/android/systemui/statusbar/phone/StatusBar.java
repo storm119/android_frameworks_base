@@ -3192,6 +3192,11 @@ public class StatusBar extends SystemUI implements DemoMode,
         return ThemeAccentUtils.isUsingDarkTheme(mOverlayManager, mCurrentUserId);
     }
 
+    // Check for the blackaf system theme
+    public boolean isUsingBlackAFTheme() {
+        return ThemeAccentUtils.isUsingBlackAFTheme(mOverlayManager, mCurrentUserId);
+    }
+
     // Unloads the stock dark theme
     public void unloadStockDarkTheme() {
         ThemeAccentUtils.unloadStockDarkTheme(mOverlayManager, mCurrentUserId);
@@ -5280,6 +5285,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         haltTicker();
 
         boolean useDarkTheme = false;
+        boolean useBlackAFTheme = false;
         if (mCurrentTheme == 0) {
             // The system wallpaper defines if QS should be light or dark.
             WallpaperColors systemColors = mColorExtractor
@@ -5288,12 +5294,19 @@ public class StatusBar extends SystemUI implements DemoMode,
                     && (systemColors.getColorHints() & WallpaperColors.HINT_SUPPORTS_DARK_THEME) != 0;
         } else {
             useDarkTheme = mCurrentTheme == 2;
+            useBlackAFTheme = mCurrentTheme == 3;
         }
         if (isUsingDarkTheme() != useDarkTheme) {
             // Check for black and white accent so we don't end up
             // with white on white or black on black
             unfuckBlackWhiteAccent();
             ThemeAccentUtils.setLightDarkTheme(mOverlayManager, mCurrentUserId, useDarkTheme);
+        }
+        if (isUsingBlackAFTheme() != useBlackAFTheme) {
+            // Check for black and white accent so we don't end up
+            // with white on white or black on black
+            unfuckBlackWhiteAccent();
+            ThemeAccentUtils.setLightBlackAFTheme(mOverlayManager, mCurrentUserId, useBlackAFTheme);
         }
 
         // Lock wallpaper defines the color of the majority of the views, hence we'll use it

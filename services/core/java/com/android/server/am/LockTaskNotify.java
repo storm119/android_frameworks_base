@@ -98,7 +98,9 @@ public class LockTaskNotify {
         View toastView = toast.getView();
         TextView message= toastView.findViewById(android.R.id.message);
         toastView.setBackgroundTintList(ColorStateList.valueOf(mContext.getResources().getColor(ThemeAccentUtils.isUsingDarkTheme(mOverlayManager, mCurrentUserId) ? R.color.screen_pinning_toast_dark_background_color : R.color.screen_pinning_toast_light_background_color)));
+        toastView.setBackgroundTintList(ColorStateList.valueOf(mContext.getResources().getColor(ThemeAccentUtils.isUsingBlackAFTheme(mOverlayManager, mCurrentUserId) ? R.color.screen_pinning_toast_dark_background_color : R.color.screen_pinning_toast_light_background_color)));
         message.setTextColor(ThemeAccentUtils.isUsingDarkTheme(mOverlayManager, mCurrentUserId) ? mContext.getColor(R.color.screen_pinning_toast_dark_text_color) : mContext.getColor(R.color.screen_pinning_toast_light_text_color));
+        message.setTextColor(ThemeAccentUtils.isUsingBlackAFTheme(mOverlayManager, mCurrentUserId) ? mContext.getColor(R.color.screen_pinning_toast_dark_text_color) : mContext.getColor(R.color.screen_pinning_toast_light_text_color));
         toast.show();
         return toast;
     }
