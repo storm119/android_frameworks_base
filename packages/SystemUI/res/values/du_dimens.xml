@@ -52,9 +52,12 @@
     <!-- QS detail view scrolling -->
     <dimen name="qs_detail_item_height_twoline">72dp</dimen>
 
-    <!-- Qs visibility -->
-    <dimen name="qs_tile_height_wo_label">48dp</dimen>
-
     <!-- Membar spacing -->
     <dimen name="recents_membar_spacing">12dp</dimen>
+
+   <!-- Qs visibility -->
+   <dimen name="qs_tile_height_wo_label">48dp</dimen>
+
+   <dimen name="qs_corner_content_padding">8dp</dimen>
+
 </resources>
