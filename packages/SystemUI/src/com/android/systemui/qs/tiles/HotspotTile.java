@@ -87,6 +87,7 @@ public class HotspotTile extends QSTileImpl<AirplaneBooleanState> {
     public void handleSetListening(boolean listening) {
         if (mListening == listening) return;
         mListening = listening;
+        if (mController == null) return;
         if (listening) {
             mController.addCallback(mCallback);
             final IntentFilter filter = new IntentFilter();
@@ -128,6 +129,7 @@ public class HotspotTile extends QSTileImpl<AirplaneBooleanState> {
 
     @Override
     protected void handleUpdateState(AirplaneBooleanState state, Object arg) {
+        if (mController == null) return;
         if (state.slash == null) {
             state.slash = new SlashState();
         }
