@@ -21,10 +21,15 @@ import android.app.AlarmManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
 import android.graphics.Rect;
+
+import android.os.Handler;
 import android.media.MediaMetadata;
 import android.os.SystemProperties;
+import android.os.UserHandle;
+import android.provider.Settings;
 
 import com.android.keyguard.KeyguardStatusView;
 import com.android.systemui.Dependency;
@@ -105,11 +110,14 @@ public class RecentsConfiguration implements NextAlarmChangeCallback {
 
     // Whether this product supports Grid-based Recents. If this is field is set to true, then
     // Recents will layout task views in a grid mode when there's enough space in the screen.
-    public boolean isGridEnabled;
+    public boolean isGridEnabledDefault;
+    public boolean mIsGridEnabled;
 
     // Support for Android Recents for low ram devices. If this field is set to true, then Recents
     // will use the alternative layout.
     public boolean isLowRamDevice;
+    public boolean isLowRamDeviceDefault;
+    public boolean mIsGoLayoutEnabled;
 
     // Enable drag and drop split from Recents. Disabled for low ram devices.
     public boolean dragToSplitEnabled;
@@ -120,6 +128,36 @@ public class RecentsConfiguration implements NextAlarmChangeCallback {
     public int fabEnterAnimDelay;
     public int fabExitAnimDuration;
 
+    private Handler mHandler = new Handler();
+    private SettingsObserver mSettingsObserver;
+
+    private class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            mAppContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RECENTS_LAYOUT_STYLE),
+                    false, this);
+            update();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            update();
+        }
+
+        public void update() {
+            mIsGridEnabled = Settings.System.getIntForUser(mAppContext.getContentResolver(),
+                    Settings.System.RECENTS_LAYOUT_STYLE, isGridEnabledDefault ? 1 : 0,
+                    UserHandle.USER_CURRENT) == 1;
+            mIsGoLayoutEnabled = Settings.System.getIntForUser(mAppContext.getContentResolver(),
+                    Settings.System.RECENTS_LAYOUT_STYLE, isLowRamDeviceDefault ? 2 : 0,
+                    UserHandle.USER_CURRENT) == 2;
+        }
+    }
+
     public RecentsConfiguration(Context context) {
         // Load only resources that can not change after the first load either through developer
         // settings or via multi window
@@ -128,9 +166,13 @@ public class RecentsConfiguration implements NextAlarmChangeCallback {
         Resources res = mAppContext.getResources();
         fakeShadows = res.getBoolean(R.bool.config_recents_fake_shadows);
         svelteLevel = res.getInteger(R.integer.recents_svelte_level);
-        isGridEnabled = SystemProperties.getBoolean("ro.recents.grid", false);
-        isLowRamDevice = ActivityManager.isLowRamDeviceStatic();
-        dragToSplitEnabled = !isLowRamDevice;
+
+        mSettingsObserver = new SettingsObserver(mHandler);
+        mSettingsObserver.observe();
+        isGridEnabledDefault = SystemProperties.getBoolean("ro.recents.grid", false);
+        isLowRamDeviceDefault = ActivityManager.isLowRamDeviceStatic();
+        isLowRamDevice = mIsGoLayoutEnabled;
+        dragToSplitEnabled = mIsGoLayoutEnabled? true : !isLowRamDeviceDefault;
 
         float screenDensity = context.getResources().getDisplayMetrics().density;
         smallestWidth = ssp.getDeviceSmallestWidth();
@@ -169,6 +211,10 @@ public class RecentsConfiguration implements NextAlarmChangeCallback {
         } else {
             return isLandscape ? DockRegion.PHONE_LANDSCAPE : DockRegion.PHONE_PORTRAIT;
         }
+    }
+
+    public boolean isGridEnabled() {
+        return mIsGridEnabled;
     }
 
     public void setMediaPlaying(boolean playing, String packageName) {
