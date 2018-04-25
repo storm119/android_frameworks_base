@@ -161,6 +161,7 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
         }
 
         setButtonVisibility(getOkButton(), !quickUnlock);
+        }
     }
 
     @Override
