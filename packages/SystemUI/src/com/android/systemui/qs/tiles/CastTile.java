@@ -164,10 +164,12 @@ public class CastTile extends QSTileImpl<BooleanState> {
             state.slash = new SlashState();
         }
         state.icon = mIcon;
+        if (mController == null){
+            return;
+        }
         state.label = mContext.getString(R.string.quick_settings_cast_title);
         state.contentDescription = state.label;
         state.value = false;
-        if (mController == null) return;
         final Set<CastDevice> devices = mController.getCastDevices();
         boolean connecting = false;
         for (CastDevice device : devices) {

@@ -64,7 +64,9 @@ public class ColorInversionTile extends QSTileImpl<BooleanState> {
 
     @Override
     public void handleSetListening(boolean listening) {
-        if (mSetting == null) return;
+        if (mSetting == null) {
+            return;
+        }
         mSetting.setListening(listening);
     }
 
@@ -91,7 +93,9 @@ public class ColorInversionTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        if (mSetting == null) return;
+        if (mSetting == null) {
+            return;
+        }
         final int value = arg instanceof Integer ? (Integer) arg : mSetting.getValue();
         final boolean enabled = value != 0;
         if (state.slash == null) {
