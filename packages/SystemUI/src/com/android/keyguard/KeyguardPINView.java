@@ -146,6 +146,7 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
                 NumPadKey view = views.get(i);
                 view.setDigit(sNumbers.get(i));
             }
+        }
 
         boolean quickUnlock = (Settings.System.getInt(getContext().getContentResolver(),
                 Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0) == 1);
@@ -161,7 +162,6 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
         }
 
         setButtonVisibility(getOkButton(), !quickUnlock);
-        }
     }
 
     @Override
