@@ -59,4 +59,7 @@
     <!-- Dynamic Navbar -->
     <color name="input_method_navigation_guard_dynamic">@android:color/transparent</color>
 
+    <!-- Two target preference vertical divider color -->
+    <color name="list_divider_dark">#64000000</color>
+
 </resources>
