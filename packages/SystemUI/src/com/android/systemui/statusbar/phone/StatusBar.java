@@ -511,7 +511,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     boolean mExpandedVisible;
 
-    private ArrayList<String> mBlacklist = new ArrayList<String>();	
+    private ArrayList<String> mBlacklist = new ArrayList<String>();
     ActivityManager mAm;
     boolean mLessBoringHeadsUp;
 
@@ -6449,6 +6449,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HEADS_UP_BLACKLIST_VALUES),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_SHOW_TICKER),
+                    false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.QS_LAYOUT_COLUMNS),
                     false, this, UserHandle.USER_ALL);
@@ -6493,7 +6496,7 @@ public class StatusBar extends SystemUI implements DemoMode,
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LESS_BORING_HEADS_UP),
-                    false, this, UserHandle.USER_ALL);        
+                    false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_TICKER_ANIMATION_MODE),
                     false, this, UserHandle.USER_ALL);
@@ -8335,7 +8338,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             return false;
         }
 
-        if (isPackageInBlacklist(sbn.getPackageName())) {
+        if (!isDozing() && isPackageInBlacklist(sbn.getPackageName())) {
             return false;
         }
 
@@ -8493,12 +8496,6 @@ public class StatusBar extends SystemUI implements DemoMode,
     }
     // End Extra BaseStatusBarMethods.
 
-    private final Runnable mAutoDim = () -> {
-        if (mNavigationBar != null) {
-            mNavigationBar.getBarTransitions().setAutoDim(true);
-        }
-    };
-    
     @Override
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
@@ -8511,4 +8508,10 @@ public class StatusBar extends SystemUI implements DemoMode,
                 break;
         }
     }
+
+    private final Runnable mAutoDim = () -> {
+        if (mNavigationBar != null) {
+            mNavigationBar.getBarTransitions().setAutoDim(true);
+        }
+    };
 }
