@@ -511,9 +511,8 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     boolean mExpandedVisible;
 
-    private ArrayList<String> mBlacklist = new ArrayList<String>();
     ActivityManager mAm;
-    boolean mLessBoringHeadsUp;
+    private ArrayList<String> mBlacklist = new ArrayList<String>();
 
     private boolean mFpQuickPulldownQs;
     private boolean mFpDismissNotifications;
@@ -6495,9 +6494,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Settings.System.USE_SLIM_RECENTS),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LESS_BORING_HEADS_UP),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_TICKER_ANIMATION_MODE),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -6550,9 +6546,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Settings.System.USE_SLIM_RECENTS))) {
                 updateRecentsMode();
             } else if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.LESS_BORING_HEADS_UP))) {
-                setUseLessBoringHeadsUp();
-            } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_TICKER_ANIMATION_MODE))) {
                 updateTickerAnimation();
             } else if (uri.equals(Settings.Secure.getUriFor(Settings.Secure.QS_LAYOUT_COLUMNS)) ||
@@ -6575,7 +6568,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             setLockscreenMediaMetadata();
             setQsPanelOptions();
             updateRecentsMode();
-            setUseLessBoringHeadsUp();
             updateTickerAnimation();
             updateQsPanelResources();
         }
@@ -6679,12 +6671,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         if (mSlimRecents != null) {
             mSlimRecents.rebuildRecentsScreen();
         }
-    }
-
-    private void setUseLessBoringHeadsUp() {
-        mLessBoringHeadsUp = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.LESS_BORING_HEADS_UP, 1,
-                UserHandle.USER_CURRENT) == 1;
     }
 
     private void updateTickerAnimation() {
@@ -8327,14 +8313,8 @@ public class StatusBar extends SystemUI implements DemoMode,
     }
 
     protected boolean shouldPeek(Entry entry, StatusBarNotification sbn) {
-        boolean isImportantHeadsUp = false;
-        String notificationPackageName = sbn.getPackageName().toLowerCase();
-        isImportantHeadsUp = notificationPackageName.contains("dialer") ||
-                notificationPackageName.contains("messaging");
-
-        if (!mUseHeadsUp || isDeviceInVrMode() || (!isDozing() && mLessBoringHeadsUp &&
-                !isImportantHeadsUp)) {
-            if (DEBUG) Log.d(TAG, "No peeking: no huns or vr mode or less boring headsup enabled");
+        if (!mUseHeadsUp && !isDozing() || isDeviceInVrMode()) {
+            if (DEBUG) Log.d(TAG, "No peeking: no huns or vr mode");
             return false;
         }
 
