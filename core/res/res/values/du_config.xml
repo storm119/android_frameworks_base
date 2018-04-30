@@ -141,5 +141,7 @@
         <item>com.linkedin.android</item>
         <item>com.Slack</item>
         <item>org.mozilla.fennec_aurora</item>
+        <item>me.bluemail.mail</item>
+        <item>com.whatsapp.whatsapp</item>
     </string-array>
 </resources>
