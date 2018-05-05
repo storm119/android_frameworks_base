@@ -95,12 +95,6 @@ public class QuickStatusBarHeader extends RelativeLayout {
         mQuickQsPanelScroller.setHorizontalScrollBarEnabled(false);
     }
 
-    public void updateSettings() {
-        if (mBatteryView != null) {
-            mBatteryView.updateSettings(true);
-        }
-    }
-
     public void updateQsbhClock() {
         if (mClock != null) {
             ((Clock)mClock).updateSettings();
@@ -190,6 +184,9 @@ public class QuickStatusBarHeader extends RelativeLayout {
     }
 
     public void updateSettings() {
+        if (mBatteryView != null) {
+            mBatteryView.updateSettings(true);
+        }
         mHeaderQsPanel.updateSettings();
     }
 }

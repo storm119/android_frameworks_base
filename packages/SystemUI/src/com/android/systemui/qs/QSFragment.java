@@ -106,6 +106,9 @@ public class QSFragment extends Fragment implements QS {
             mQSCustomizer.setEditLocation(x, y);
             mQSCustomizer.restoreInstanceState(savedInstanceState);
         }
+
+        mQSPanel.updateSettings();
+        mHeader.updateSettings();
     }
 
     @Override
@@ -363,6 +366,7 @@ public class QSFragment extends Fragment implements QS {
 
         if (!mQSCustomizer.isCustomizing()) {
             mQSPanel.updateSettings();
+            mHeader.updateSettings();
         }
     }
 
