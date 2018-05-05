@@ -147,14 +147,11 @@
         <item>com.snapchat.android</item>
         <item>com.instagram.android</item>
         <item>com.facebook.katana</item>
-        <item>com.android.vending</item>
-        <item>com.google.android.gms</item>
         <item>com.facebook.lite</item>
         <item>com.spotify.music</item>
         <item>com.linkedin.android</item>
         <item>com.Slack</item>
         <item>org.mozilla.fennec_aurora</item>
-        <item>me.bluemail.mail</item>
         <item>com.whatsapp.whatsapp</item>
     </string-array>
 </resources>
