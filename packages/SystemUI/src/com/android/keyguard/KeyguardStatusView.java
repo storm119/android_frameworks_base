@@ -18,6 +18,7 @@ package com.android.keyguard;
 
 import android.app.ActivityManager;
 import android.app.AlarmManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContentResolver;
 import android.content.res.ColorStateList;
@@ -36,6 +37,8 @@ import android.provider.Settings;
 import android.service.dreams.DreamService;
 import android.service.dreams.IDreamManager;
 import android.support.v4.graphics.ColorUtils;
+import android.graphics.PorterDuff.Mode;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
@@ -81,6 +84,8 @@ public class KeyguardStatusView extends GridLayout {
     private int mTextColor;
     private int mDateTextColor;
     private int mAlarmTextColor;
+    private int mLockClockFontSize;
+    private int mLockDateFontSize;
 
     private boolean mForcedMediaDoze;
 
@@ -97,6 +102,8 @@ public class KeyguardStatusView extends GridLayout {
                 if (DEBUG) Slog.v(TAG, "refresh statusview showing:" + showing);
                 refresh();
                 updateOwnerInfo();
+                refreshLockFont();
+                lockscreenColors();
             }
         }
 
@@ -114,6 +121,8 @@ public class KeyguardStatusView extends GridLayout {
         public void onUserSwitchComplete(int userId) {
             refresh();
             updateOwnerInfo();
+            refreshLockFont();
+            lockscreenColors();
         }
     };
 
@@ -130,6 +139,7 @@ public class KeyguardStatusView extends GridLayout {
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         mLockPatternUtils = new LockPatternUtils(getContext());
         mHandler = new Handler(Looper.myLooper());
+        lockscreenColors();
     }
 
     private void setEnableMarquee(boolean enabled) {
@@ -180,6 +190,8 @@ public class KeyguardStatusView extends GridLayout {
         setEnableMarquee(shouldMarquee);
         refresh();
         updateOwnerInfo();
+        refreshLockFont();
+        lockscreenColors();
 
         // Disable elegant text height because our fancy colon makes the ymin value huge for no
         // reason.
@@ -190,8 +202,8 @@ public class KeyguardStatusView extends GridLayout {
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Typeface tf = Typeface.create(FONT_FAMILY, Typeface.NORMAL);
-        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                getResources().getDimensionPixelSize(R.dimen.widget_big_font_size));
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,mLockClockFontSize);
+        mDateView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mLockDateFontSize);
         mClockView.setTypeface(tf);
         // Some layouts like burmese have a different margin for the clock
         MarginLayoutParams layoutParams = (MarginLayoutParams) mClockView.getLayoutParams();
@@ -199,9 +211,6 @@ public class KeyguardStatusView extends GridLayout {
                 R.dimen.bottom_text_spacing_digital);
         mClockView.setLayoutParams(layoutParams);
         mClockView.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
-        mDateView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                getResources().getDimensionPixelSize(R.dimen.widget_label_font_size));
-        mDateView.setTypeface(tf);
         if (mOwnerInfo != null) {
             mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     getResources().getDimensionPixelSize(R.dimen.widget_label_font_size));
@@ -230,6 +239,7 @@ public class KeyguardStatusView extends GridLayout {
         refreshTime();
         refreshAlarmStatus(nextAlarm);
         refreshLockFont();
+        lockscreenColors();
         updateSettings(false);
     }
 
@@ -279,6 +289,7 @@ public class KeyguardStatusView extends GridLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mInfoCallback);
+        lockscreenColors();
         updateSettings(false);
     }
 
@@ -325,6 +336,77 @@ public class KeyguardStatusView extends GridLayout {
         mClockView = (TextClock) findViewById(R.id.clock_view);
         mDateView = (DateView) findViewById(R.id.date_view);
         mAlarmStatusView = (TextView) findViewById(R.id.alarm_status);
+
+        mLockClockFontSize = Settings.System.getIntForUser(resolver,
+                Settings.System.LOCKCLOCK_FONT_SIZE, getResources().getDimensionPixelSize(R.dimen.widget_big_font_size), UserHandle.USER_CURRENT);
+        mLockDateFontSize = Settings.System.getIntForUser(resolver,
+                Settings.System.LOCKDATE_FONT_SIZE, getResources().getDimensionPixelSize(R.dimen.widget_label_font_size), UserHandle.USER_CURRENT);
+        int dateFont = Settings.System.getIntForUser(resolver,
+                Settings.System.LOCK_DATE_FONTS, 4, UserHandle.USER_CURRENT);
+
+        if (mClockView != null) {
+            if (mLockClockFontSize != getResources().getDimensionPixelSize(R.dimen.widget_big_font_size)) {
+                mClockView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mLockClockFontSize);
+            }
+        }
+
+        if (mDateView != null) {
+            if (mLockDateFontSize != getResources().getDimensionPixelSize(R.dimen.widget_label_font_size)) {
+                mDateView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mLockDateFontSize);
+            }
+        }
+
+        if (dateFont == 0) {
+            mDateView.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
+        }
+        if (dateFont == 1) {
+            mDateView.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+        }
+        if (dateFont == 2) {
+            mDateView.setTypeface(Typeface.create("sans-serif", Typeface.ITALIC));
+        }
+        if (dateFont == 3) {
+            mDateView.setTypeface(Typeface.create("sans-serif", Typeface.BOLD_ITALIC));
+        }
+        if (dateFont == 4) {
+            mDateView.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+        }
+        if (dateFont == 5) {
+            mDateView.setTypeface(Typeface.create("sans-serif-light", Typeface.ITALIC));
+        }
+        if (dateFont == 6) {
+            mDateView.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
+        }
+        if (dateFont == 7) {
+            mDateView.setTypeface(Typeface.create("sans-serif-condensed", Typeface.ITALIC));
+        }
+        if (dateFont == 8) {
+            mDateView.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD));
+        }
+        if (dateFont == 9) {
+            mDateView.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD_ITALIC));
+        }
+        if (dateFont == 10) {
+            mDateView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+        }
+        if (dateFont == 11) {
+            mDateView.setTypeface(Typeface.create("sans-serif-meduim", Typeface.ITALIC));
+        }
+        if (dateFont == 12) {
+            mDateView.setTypeface(Typeface.create("gobold-light-sys", Typeface.NORMAL));
+        }
+        if (dateFont == 13) {
+            mDateView.setTypeface(Typeface.create("roadrage-sys", Typeface.NORMAL));
+        }
+        if (dateFont == 14) {
+            mDateView.setTypeface(Typeface.create("snowstorm-sys", Typeface.NORMAL));
+        }
+        if (dateFont == 15) {
+            mDateView.setTypeface(Typeface.create("googlesans-sys", Typeface.NORMAL));
+        }
+        if (dateFont == 16) {
+            mDateView.setTypeface(Typeface.create("themeable-sys", Typeface.NORMAL));
+        }
 
         if (!isDozeMode()) {
             mClockView.setVisibility(showClock ? View.VISIBLE : View.GONE);
@@ -399,6 +481,34 @@ public class KeyguardStatusView extends GridLayout {
         }
         if (lockClockFont == 16) {
             mClockView.setTypeface(Typeface.create("themeable-sys", Typeface.NORMAL));
+        }
+    }
+
+    // LockscreenColors
+    private void lockscreenColors() {
+        final ContentResolver resolver = getContext().getContentResolver();
+        int clockColor = Settings.System.getInt(resolver,
+                Settings.System.LOCKSCREEN_CLOCK_COLOR, 0xFFFFFFFF);
+        int clockDateColor = Settings.System.getInt(resolver,
+                Settings.System.LOCKSCREEN_CLOCK_DATE_COLOR, 0xFFFFFFFF);
+        int ownerInfoColor = Settings.System.getInt(resolver,
+                Settings.System.LOCKSCREEN_OWNER_INFO_COLOR, 0xFFFFFFFF);
+        int alarmColor = Settings.System.getInt(resolver,
+                Settings.System.LOCKSCREEN_ALARM_COLOR, 0xFFFFFFFF);
+        if (mClockView != null) {
+            mClockView.setTextColor(clockColor);
+        }
+
+        if (mDateView != null) {
+            mDateView.setTextColor(clockDateColor);
+        }
+
+        if (mOwnerInfo != null) {
+            mOwnerInfo.setTextColor(ownerInfoColor);
+        }
+
+        if (mAlarmStatusView != null) {
+            mAlarmStatusView.setTextColor(alarmColor);
         }
     }
 
