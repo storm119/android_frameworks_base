@@ -53,17 +53,18 @@
   <string name="systemui_tuner_navbar_title">Stock settings</string>
   <string name="status_bar_vpn">VPN</string>
   <!-- QS Tiles -->
-  <string name="quick_settings_reboot_label">Reboot</string>
-  <string name="quick_settings_reboot_recovery_label">Recovery</string>
-  <string name="quick_settings_screenshot_label">Screenshot</string>
-  <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
-  <string name="quick_settings_caffeine_label">Caffeine</string>
-  <string name="accessibility_quick_settings_caffeine_off">Caffeine off</string>
-  <string name="accessibility_quick_settings_caffeine_on">Caffeine on</string>
-  <string name="caffeine_info_title">What is this?</string>
-  <string name="caffeine_info_message">The Caffeine tile is a simple tile that you could switch on to keep your screen on after being idle.\n\nPlease note that the tile\'s state will reset itself after turning the screen off.</string>
-  <string name="theme_info_title">What is this?</string>
-  <string name="theme_info_message">The Themes tile is a unique but easy to use tile that allows the user to change the system accent or style.\n\nTo change between accents and styles, simply long press on the tile and then press again to select from the options offered.</string>
+  <string name="quick_settings_reboot_label">Reiniciar</string>
+  <string name="quick_settings_reboot_recovery_label">Recuperació</string>
+  <string name="quick_settings_poweroff_label">Power off</string>
+  <string name="quick_settings_screenshot_label">Captura de pantalla</string>
+  <string name="quick_settings_region_screenshot_label">Captura de pantalla parcial</string>
+  <string name="quick_settings_caffeine_label">Cafeïna</string>
+  <string name="accessibility_quick_settings_caffeine_off">Cafeïna desactivada</string>
+  <string name="accessibility_quick_settings_caffeine_on">Cafeïna activada</string>
+  <string name="caffeine_info_title">Què és això?</string>
+  <string name="caffeine_info_message">El mosaic de cafeïna és un mosaic senzill que podries activar per mantenir la pantalla encesa després d\'anar a repòs.\n\nSi us plau nota que l\'estat del mosaic es restaurarà després d\'apagar la pantalla.</string>
+  <string name="theme_info_title">Què és això?</string>
+  <string name="theme_info_message">La fitxa de temes és un mosaic únic però fàcil d\'utilitzar que permet l\'usuari canviar l\'estil del sistema.\n\nPer canviar entre èmfasi i estils, simplement feu una pulsació llarga a la fitxa i premeu de nou per seleccionar les opcions que ofereix.</string>
   <!-- QS customizer -->
   <string name="drag_or_tap_to_add_tiles">Drag or tap to add tiles</string>
   <!-- Navigation bar Tile -->
