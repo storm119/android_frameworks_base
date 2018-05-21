@@ -4513,13 +4513,13 @@ public final class Settings {
          */
         public static final String NOTIFICATION_SOUND_VIB_SCREEN_ON = "notification_sound_vib_screen_on";
 
-		/**
+        /**
          * Whether to show a notification when the battery is charged at the set level and screen is off
          * @hide
          */
         public static final String ALERT_ON_CHARGED_LEVEL = "alert_on_charged_level";
 
-		/**
+        /**
          * Show or hide clock
          * 0 - hide
          * 1 - show (default)
@@ -4601,7 +4601,7 @@ public final class Settings {
          */
         public static final String STATUSBAR_CLOCK_DATE_FORMAT = "statusbar_clock_date_format";
 
-		/**
+        /**
          * Position of date
          * 0 - Left of clock
          * 1 - Right of clock
@@ -4896,6 +4896,20 @@ public final class Settings {
          * @hide
          */
         public static final String LOCK_DATE_FONTS = "lock_date_fonts";
+
+        /**
+         * Change fonts for the lockscreen owner info text
+         *
+         * @hide
+         */
+        public static final String LOCK_OWNER_FONTS = "lock_owner_fonts";
+
+        /**
+         * Change fonts size for the lockscreen owner info text
+         *
+         * @hide
+         */
+        public static final String LOCKOWNER_FONT_SIZE = "lockowner_font_size";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings

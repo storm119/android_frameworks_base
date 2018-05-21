@@ -90,6 +90,7 @@ public class KeyguardStatusView extends GridLayout {
     private int mAlarmTextColor;
     private int mLockClockFontSize;
     private int mLockDateFontSize;
+    private int mLockOwnerFontSize;
 
     private boolean mForcedMediaDoze;
 
@@ -213,18 +214,13 @@ public class KeyguardStatusView extends GridLayout {
         Typeface tf = Typeface.create(FONT_FAMILY, Typeface.NORMAL);
         mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,mLockClockFontSize);
         mDateView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mLockDateFontSize);
-        mClockView.setTypeface(tf);
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, mLockOwnerFontSize);
         // Some layouts like burmese have a different margin for the clock
         MarginLayoutParams layoutParams = (MarginLayoutParams) mClockView.getLayoutParams();
         layoutParams.bottomMargin = getResources().getDimensionPixelSize(
                 R.dimen.bottom_text_spacing_digital);
         mClockView.setLayoutParams(layoutParams);
         mClockView.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
-        if (mOwnerInfo != null) {
-            mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    getResources().getDimensionPixelSize(R.dimen.widget_label_font_size));
-           mOwnerInfo.setTypeface(tf);
-        }
         mAlarmStatusView.setTypeface(tf);
     }
 
@@ -350,8 +346,12 @@ public class KeyguardStatusView extends GridLayout {
                 Settings.System.LOCKCLOCK_FONT_SIZE, getResources().getDimensionPixelSize(R.dimen.widget_big_font_size), UserHandle.USER_CURRENT);
         mLockDateFontSize = Settings.System.getIntForUser(resolver,
                 Settings.System.LOCKDATE_FONT_SIZE, getResources().getDimensionPixelSize(R.dimen.widget_label_font_size), UserHandle.USER_CURRENT);
+        mLockOwnerFontSize = Settings.System.getIntForUser(resolver,
+                Settings.System.LOCKOWNER_FONT_SIZE, getResources().getDimensionPixelSize(R.dimen.widget_label_font_size), UserHandle.USER_CURRENT);
         int dateFont = Settings.System.getIntForUser(resolver,
                 Settings.System.LOCK_DATE_FONTS, 4, UserHandle.USER_CURRENT);
+        int LockOwnerFont = Settings.System.getIntForUser(resolver,
+                Settings.System.LOCK_OWNER_FONTS, 4, UserHandle.USER_CURRENT);
 
         if (mClockView != null) {
             if (mLockClockFontSize != getResources().getDimensionPixelSize(R.dimen.widget_big_font_size)) {
@@ -362,6 +362,12 @@ public class KeyguardStatusView extends GridLayout {
         if (mDateView != null) {
             if (mLockDateFontSize != getResources().getDimensionPixelSize(R.dimen.widget_label_font_size)) {
                 mDateView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mLockDateFontSize);
+            }
+        }
+
+        if (mOwnerInfo != null) {
+            if (mLockOwnerFontSize != getResources().getDimensionPixelSize(R.dimen.widget_label_font_size)) {
+                mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, mLockOwnerFontSize);
             }
         }
 
@@ -415,6 +421,58 @@ public class KeyguardStatusView extends GridLayout {
         }
         if (dateFont == 16) {
             mDateView.setTypeface(Typeface.create("themeable-sys", Typeface.NORMAL));
+        }
+
+        if (LockOwnerFont == 0) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
+        }
+        if (LockOwnerFont == 1) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+        }
+        if (LockOwnerFont == 2) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif", Typeface.ITALIC));
+        }
+        if (LockOwnerFont == 3) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif", Typeface.BOLD_ITALIC));
+        }
+        if (LockOwnerFont == 4) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+        }
+        if (LockOwnerFont == 5) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-light", Typeface.ITALIC));
+        }
+        if (LockOwnerFont == 6) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
+        }
+        if (LockOwnerFont == 7) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-condensed", Typeface.ITALIC));
+        }
+        if (LockOwnerFont == 8) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD));
+        }
+        if (LockOwnerFont == 9) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD_ITALIC));
+        }
+        if (LockOwnerFont == 10) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+        }
+        if (LockOwnerFont == 11) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-meduim", Typeface.ITALIC));
+        }
+        if (LockOwnerFont == 12) {
+            mOwnerInfo.setTypeface(Typeface.create("gobold-light-sys", Typeface.NORMAL));
+        }
+        if (LockOwnerFont == 13) {
+            mOwnerInfo.setTypeface(Typeface.create("roadrage-sys", Typeface.NORMAL));
+        }
+        if (LockOwnerFont == 14) {
+            mOwnerInfo.setTypeface(Typeface.create("snowstorm-sys", Typeface.NORMAL));
+        }
+        if (LockOwnerFont == 15) {
+            mOwnerInfo.setTypeface(Typeface.create("googlesans-sys", Typeface.NORMAL));
+        }
+        if (LockOwnerFont == 16) {
+            mOwnerInfo.setTypeface(Typeface.create("themeable-sys", Typeface.NORMAL));
         }
 
         if (!isDozeMode()) {
