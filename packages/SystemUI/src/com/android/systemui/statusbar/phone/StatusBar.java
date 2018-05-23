@@ -8549,6 +8549,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             default:
                 break;
         }
+    }
 
     @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_METHOD)
     protected void addGestureAnywhereView() {
