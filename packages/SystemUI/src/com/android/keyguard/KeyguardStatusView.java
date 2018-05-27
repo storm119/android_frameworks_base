@@ -225,7 +225,7 @@ public class KeyguardStatusView extends GridLayout {
         Typeface tf = Typeface.create(FONT_FAMILY, Typeface.NORMAL);
 
         // Pimp my LockScreen Font size
-        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,mLockClockFontSize);
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mLockClockFontSize);
         mDateView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mLockDateFontSize);
         mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, mLockOwnerFontSize);
         MarginLayoutParams layoutParams = (MarginLayoutParams) mClockView.getLayoutParams();
@@ -687,11 +687,6 @@ public class KeyguardStatusView extends GridLayout {
         updateDozeVisibleViews();
     }
 
-    public void updateAll() {
-        updateSettings();
-        refresh();
-    }
-
     private void refreshLockFont() {
         final Resources res = getContext().getResources();
         boolean isPrimary = UserHandle.getCallingUserId() == UserHandle.USER_OWNER;
@@ -808,6 +803,11 @@ public class KeyguardStatusView extends GridLayout {
         }
     }
 
+    public void updateAll() {
+        updateSettings();
+        refresh();
+    }
+
     // DateFormat.getBestDateTimePattern is extremely expensive, and refresh is called often.
     // This is an optimization to ensure we only recompute the patterns when the inputs change.
     private static final class Patterns {
@@ -847,6 +847,8 @@ public class KeyguardStatusView extends GridLayout {
 
     public void setDark(float darkAmount) {
         if (mDarkAmount == darkAmount) {
+            updateVisibilities();
+            lockscreenColors();
             return;
         }
         mDarkAmount = darkAmount;
@@ -874,6 +876,7 @@ public class KeyguardStatusView extends GridLayout {
         mAnalogClockView.setDark(dark);
         mDeadPoolClockView.setDark(dark);
         updateVisibilities();
+        lockscreenColors();
     }
 
     public void setPulsing(boolean pulsing) {

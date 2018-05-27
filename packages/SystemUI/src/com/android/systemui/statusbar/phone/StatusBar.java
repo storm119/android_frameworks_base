@@ -6544,6 +6544,36 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_DATE_SELECTION),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCK_CLOCK_FONTS),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCK_DATE_FONTS),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCK_OWNER_FONTS),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKCLOCK_FONT_SIZE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKDATE_FONT_SIZE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKOWNER_FONT_SIZE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_CLOCK_COLOR),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_CLOCK_DATE_COLOR),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_OWNER_INFO_COLOR),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_ALARM_COLOR),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -6610,7 +6640,17 @@ public class StatusBar extends SystemUI implements DemoMode,
                     uri.equals(Settings.System.getUriFor(Settings.System.HIDE_LOCKSCREEN_CLOCK)) ||
                     uri.equals(Settings.System.getUriFor(Settings.System.HIDE_LOCKSCREEN_DATE)) ||
                     uri.equals(Settings.System.getUriFor(Settings.System.LOCKSCREEN_CLOCK_SELECTION)) ||
-                    uri.equals(Settings.System.getUriFor(Settings.System.LOCKSCREEN_DATE_SELECTION))) {
+                    uri.equals(Settings.System.getUriFor(Settings.System.LOCKSCREEN_DATE_SELECTION)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.LOCK_CLOCK_FONTS)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.LOCK_DATE_FONTS)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.LOCK_OWNER_FONTS)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.LOCKCLOCK_FONT_SIZE)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.LOCKDATE_FONT_SIZE)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.LOCKOWNER_FONT_SIZE)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.LOCKSCREEN_CLOCK_COLOR)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.LOCKSCREEN_CLOCK_DATE_COLOR)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.LOCKSCREEN_OWNER_INFO_COLOR)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.LOCKSCREEN_ALARM_COLOR))) {
                 updateKeyguardStatusSettings();
             }
         }
