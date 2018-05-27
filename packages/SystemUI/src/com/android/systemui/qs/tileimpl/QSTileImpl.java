@@ -31,6 +31,7 @@ import android.metrics.LogMaker;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.text.format.DateUtils;
 import android.util.ArraySet;
@@ -389,13 +390,13 @@ public abstract class QSTileImpl<TState extends State> implements QSTile {
                             Utils.getColorAttr(context, android.R.attr.colorForeground));
                 } else {
                     return Utils.getDisabled(context,
-                            context.getResources().getColor(R.color.qs_tiles_unavailable_tint));
+                            Utils.getColorAttr(context, android.R.attr.colorForeground));
                 }
             case Tile.STATE_INACTIVE:
                 if (!enableQsTileTinting) {
                     return Utils.getColorAttr(context, android.R.attr.textColorHint);
                 } else {
-                    return context.getResources().getColor(R.color.qs_tiles_inactive_tint);
+                    return Utils.getColorAttr(context, android.R.attr.textColorHint);
                 }
             case Tile.STATE_ACTIVE:
                 if (!enableQsTileTinting) {
