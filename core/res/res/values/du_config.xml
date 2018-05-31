@@ -135,6 +135,11 @@
     <!-- Whether device has turbo power charging support -->
     <bool name="config_hasTurboPowerCharger">false</bool>
 
+    <!-- True if the notification's dynamic app icon/title tint should be optimised for dark
+    backgrounds (requires config_allowNotificationIconTextTinting to be true)-->
+    <bool name="config_useDarkBgNotificationTinting_override">false</bool>
+    <bool name="config_notificationTinting_override">false</bool>
+
     <!-- Whether the device supports Smart Pixels -->
     <bool name="config_enableSmartPixels">false</bool>
     
