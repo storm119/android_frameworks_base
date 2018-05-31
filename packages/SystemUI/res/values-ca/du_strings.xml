@@ -28,13 +28,13 @@
   <string name="du_logo_title">DU swag</string>
   <string name="du_logo_summary">Let everyone know that you\'re using DU when they see your screen</string>
   <!-- Power menu -->
-  <string name="global_action_restart_system">Reboot</string>
-  <string name="global_action_restart_advanced">Advanced</string>
-  <string name="global_action_restart_recovery">Recovery</string>
-  <string name="global_action_restart_bootloader">Bootloader</string>
-  <string name="global_action_restart_ui">SystemUI</string>
-  <string name="global_action_restart_hot">Hot</string>
-  <string name="global_action_screenshot">Screenshot</string>
+  <string name="global_action_restart_system">Reinicia</string>
+  <string name="global_action_restart_advanced">Avançat</string>
+  <string name="global_action_restart_recovery">Recuperació</string>
+  <string name="global_action_restart_bootloader">Gestor d\'arrencada</string>
+  <string name="global_action_restart_ui">Interficie d\'usuari</string>
+  <string name="global_action_restart_hot">Ràpid</string>
+  <string name="global_action_screenshot">Captura de pantalla</string>
   <!-- Screenshot Delete Toast -->
   <string name="delete_screenshot_toast">Screenshot deleted</string>
   <!-- Battery saver tile -->
