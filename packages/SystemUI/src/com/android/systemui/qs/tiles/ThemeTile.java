@@ -60,7 +60,7 @@ import java.util.Set;
 
 public class ThemeTile extends QSTileImpl<BooleanState> {
 
-    private final String substratum = "projekt.substratum";
+    //private final String substratum = "projekt.substratum";
 
     static final List<ThemeTileItem> sThemeItems = new ArrayList<ThemeTileItem>();
     static {
@@ -352,10 +352,10 @@ public class ThemeTile extends QSTileImpl<BooleanState> {
 
     @Override
     public boolean isAvailable() {
-        return !isPackageInstalled();
+        return true;
     }
 
-    private boolean isPackageInstalled() {
+    /*private boolean isPackageInstalled() {
         try {
             PackageInfo info = mContext.getPackageManager()
                     .getPackageInfo(substratum, PackageManager.GET_META_DATA);
@@ -363,7 +363,7 @@ public class ThemeTile extends QSTileImpl<BooleanState> {
             return false;
         }
         return true;
-    }
+    }*/
 
     @Override
     public Intent getLongClickIntent() {
