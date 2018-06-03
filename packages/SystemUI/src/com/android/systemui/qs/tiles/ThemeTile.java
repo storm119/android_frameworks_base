@@ -37,6 +37,7 @@ import android.widget.ListView;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.settingslib.ThemeUtils;
 
 import com.android.systemui.Prefs;
 import com.android.systemui.R;
@@ -59,8 +60,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class ThemeTile extends QSTileImpl<BooleanState> {
-
-    //private final String substratum = "projekt.substratum";
 
     static final List<ThemeTileItem> sThemeItems = new ArrayList<ThemeTileItem>();
     static {
@@ -352,18 +351,8 @@ public class ThemeTile extends QSTileImpl<BooleanState> {
 
     @Override
     public boolean isAvailable() {
-        return true;
+        return !ThemeUtils.isSubstratumOverlayInstalled(mContext);
     }
-
-    /*private boolean isPackageInstalled() {
-        try {
-            PackageInfo info = mContext.getPackageManager()
-                    .getPackageInfo(substratum, PackageManager.GET_META_DATA);
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
-        return true;
-    }*/
 
     @Override
     public Intent getLongClickIntent() {
