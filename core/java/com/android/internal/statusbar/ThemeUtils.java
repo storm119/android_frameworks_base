@@ -14,7 +14,7 @@
 
  */
 
-package com.android.settingslib;
+package com.android.internal.statusbar;
 
 import android.content.Context;
 import android.content.om.IOverlayManager;

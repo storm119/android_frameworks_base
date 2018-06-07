@@ -37,7 +37,7 @@ import android.widget.ListView;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
-import com.android.settingslib.ThemeUtils;
+import com.android.internal.statusbar.ThemeUtils;
 
 import com.android.systemui.Prefs;
 import com.android.systemui.R;
