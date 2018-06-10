@@ -155,10 +155,13 @@
 
   <!-- Whether the device supports Smart Pixels -->
   <java-symbol type="bool" name="config_enableSmartPixels" />
-  
+
   <!-- sensor block per-package -->
   <java-symbol type="array" name="config_blockPackagesSensorDrain" />
-  
+
   <!-- Dynamic Navbar -->
   <java-symbol type="color" name="input_method_navigation_guard_dynamic" />
+
+  <!-- Custom clocks -->
+  <java-symbol type="string" name="custom_clock_styles" />
 </resources>
