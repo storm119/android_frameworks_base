@@ -44,7 +44,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CustomAnalogClock;
-import android.widget.DeadPoolAnalogClock;
 import android.widget.GridLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
@@ -70,7 +69,6 @@ public class KeyguardStatusView extends GridLayout {
     private TextView mAlarmStatusView;
     private DateView mDateView;
     private CustomAnalogClock mAnalogClockView;
-    private DeadPoolAnalogClock mDeadPoolClockView;
     private TextClock mClockView;
     private TextView mOwnerInfo;
     private ViewGroup mClockContainer;
@@ -192,7 +190,6 @@ public class KeyguardStatusView extends GridLayout {
         mAlarmStatusView = findViewById(R.id.alarm_status);
         mDateView = findViewById(R.id.date_view);
         mAnalogClockView = findViewById(R.id.analog_clock_view);
-        mDeadPoolClockView = findViewById(R.id.deadpool_clock_view);
         mClockView = findViewById(R.id.clock_view);
         mClockView.setShowCurrentUserTime(true);
         if (KeyguardClockAccessibilityDelegate.isNeeded(mContext)) {
@@ -201,7 +198,7 @@ public class KeyguardStatusView extends GridLayout {
         mOwnerInfo = findViewById(R.id.owner_info);
         //mBatteryDoze = findViewById(R.id.battery_doze);
         mKeyguardStatusArea = findViewById(R.id.keyguard_status_area);
-        mVisibleInDoze = new View[]{/*mBatteryDoze, */mClockView, mAnalogClockView, mDeadPoolClockView, mKeyguardStatusArea};
+        mVisibleInDoze = new View[]{/*mBatteryDoze, */mClockView, mAnalogClockView, mKeyguardStatusArea};
         mTextColor = mClockView.getCurrentTextColor();
         mDateTextColor = mDateView.getCurrentTextColor();
         mAlarmTextColor = mAlarmStatusView.getCurrentTextColor();
@@ -243,12 +240,6 @@ public class KeyguardStatusView extends GridLayout {
                 R.dimen.bottom_text_spacing_digital);
         mAnalogClockView.setLayoutParams(customlayoutParams);
 
-        // DeadPool analog clock
-        MarginLayoutParams deadpoollayoutParams = (MarginLayoutParams) mDeadPoolClockView.getLayoutParams();
-        deadpoollayoutParams.bottomMargin = getResources().getDimensionPixelSize(
-                R.dimen.bottom_text_spacing_digital);
-        mDeadPoolClockView.setLayoutParams(deadpoollayoutParams);
-
         mAlarmStatusView.setTypeface(tf);
     }
 
@@ -266,7 +257,7 @@ public class KeyguardStatusView extends GridLayout {
         } else if (mClockSelection == 1) {
             mClockView.setFormat12Hour(Html.fromHtml("<strong>h</strong>mm"));
             mClockView.setFormat24Hour(Html.fromHtml("<strong>kk</strong>mm"));
-        } else if (mClockSelection == 5) {
+        } else if (mClockSelection == 3) {
             mClockView.setFormat12Hour(Html.fromHtml("<strong>hh</strong><br>mm"));
             mClockView.setFormat24Hour(Html.fromHtml("<strong>kk</strong><br>mm"));
         } else {
@@ -375,32 +366,22 @@ public class KeyguardStatusView extends GridLayout {
             default:
                 mClockView.setVisibility(mDarkAmount != 1 ? (mShowClock ? View.VISIBLE : View.GONE) : View.VISIBLE);
                 mAnalogClockView.setVisibility(View.GONE);
-                mDeadPoolClockView.setVisibility(View.GONE);
                 break;
             case 1: // digital (bold)
                 mClockView.setVisibility(mDarkAmount != 1 ? (mShowClock ? View.VISIBLE : View.GONE) : View.VISIBLE);
                 mAnalogClockView.setVisibility(View.GONE);
-                mDeadPoolClockView.setVisibility(View.GONE);
                 break;
-            case 2: // analog
+            case 2: // sammy
+                mClockView.setVisibility(mDarkAmount != 1 ? (mShowClock ? View.VISIBLE : View.GONE) : View.VISIBLE);
+                mAnalogClockView.setVisibility(View.GONE);
+                break;
+            case 3: // sammy (bold)
+                mClockView.setVisibility(mDarkAmount != 1 ? (mShowClock ? View.VISIBLE : View.GONE) : View.VISIBLE);
+                mAnalogClockView.setVisibility(View.GONE);
+                break;
+            case 4: // analog
                 mAnalogClockView.setVisibility(mDarkAmount != 1 ? (mShowClock ? View.VISIBLE : View.GONE) : View.VISIBLE);
                 mClockView.setVisibility(View.GONE);
-                mDeadPoolClockView.setVisibility(View.GONE);
-                break;
-            case 3: // analog (deadpool)
-                mDeadPoolClockView.setVisibility(mDarkAmount != 1 ? (mShowClock ? View.VISIBLE : View.GONE) : View.VISIBLE);
-                mAnalogClockView.setVisibility(View.GONE);
-                mClockView.setVisibility(View.GONE);
-                break;
-            case 4: // sammy
-                mClockView.setVisibility(mDarkAmount != 1 ? (mShowClock ? View.VISIBLE : View.GONE) : View.VISIBLE);
-                mAnalogClockView.setVisibility(View.GONE);
-                mDeadPoolClockView.setVisibility(View.GONE);
-                break;
-            case 5: // sammy (bold)
-                mClockView.setVisibility(mDarkAmount != 1 ? (mShowClock ? View.VISIBLE : View.GONE) : View.VISIBLE);
-                mAnalogClockView.setVisibility(View.GONE);
-                mDeadPoolClockView.setVisibility(View.GONE);
                 break;
         }
 
@@ -634,38 +615,28 @@ public class KeyguardStatusView extends GridLayout {
                 mClockView.setSingleLine(true);
                 mClockView.setGravity(Gravity.CENTER);
                 mAnalogClockView.unregisterReceiver();
-                mDeadPoolClockView.unregisterReceiver();
                 break;
             case 1: // digital (bold)
                 params.addRule(RelativeLayout.BELOW, R.id.clock_view);
                 mClockView.setSingleLine(true);
                 mClockView.setGravity(Gravity.CENTER);
                 mAnalogClockView.unregisterReceiver();
-                mDeadPoolClockView.unregisterReceiver();
                 break;
-            case 2: // analog
+            case 2: // sammy
+                params.addRule(RelativeLayout.BELOW, R.id.clock_view);
+                mClockView.setSingleLine(false);
+                mClockView.setGravity(Gravity.CENTER);
+                mAnalogClockView.unregisterReceiver();
+                break;
+            case 3: // sammy (bold)
+                params.addRule(RelativeLayout.BELOW, R.id.clock_view);
+                mClockView.setSingleLine(false);
+                mClockView.setGravity(Gravity.CENTER);
+                mAnalogClockView.unregisterReceiver();
+                break;
+            case 4: // analog
                 params.addRule(RelativeLayout.BELOW, R.id.analog_clock_view);
                 mAnalogClockView.registerReceiver();
-                mDeadPoolClockView.unregisterReceiver();
-                break;
-            case 3: // analog (deadpool)
-                params.addRule(RelativeLayout.BELOW, R.id.deadpool_clock_view);
-                mAnalogClockView.unregisterReceiver();
-                mDeadPoolClockView.registerReceiver();
-                break;
-            case 4: // sammy
-                params.addRule(RelativeLayout.BELOW, R.id.clock_view);
-                mClockView.setSingleLine(false);
-                mClockView.setGravity(Gravity.CENTER);
-                mAnalogClockView.unregisterReceiver();
-                mDeadPoolClockView.unregisterReceiver();
-                break;
-            case 5: // sammy (bold)
-                params.addRule(RelativeLayout.BELOW, R.id.clock_view);
-                mClockView.setSingleLine(false);
-                mClockView.setGravity(Gravity.CENTER);
-                mAnalogClockView.unregisterReceiver();
-                mDeadPoolClockView.unregisterReceiver();
                 break;
         }
 
@@ -879,8 +850,7 @@ public class KeyguardStatusView extends GridLayout {
         mAlarmStatusView.setTextColor(blendedAlarmColor);
         mAlarmStatusView.setCompoundDrawableTintList(ColorStateList.valueOf(blendedAlarmColor));
         mAnalogClockView.setDark(dark);
-        mDeadPoolClockView.setDark(dark);
-        updateVisibilities();
+        updateVisibilities(); // with updated mDarkAmount value
         lockscreenColors();
     }
 
