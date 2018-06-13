@@ -232,7 +232,7 @@ public class KeyguardStatusView extends GridLayout {
         mClockView.setLayoutParams(layoutParams);
 
         // Pimp my LockScreen Font
-        mClockView.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
+        //mClockView.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
 
         // Custom analog clock
         MarginLayoutParams customlayoutParams = (MarginLayoutParams) mAnalogClockView.getLayoutParams();
@@ -245,7 +245,7 @@ public class KeyguardStatusView extends GridLayout {
 
     private int getLockClockFont() {
         return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.LOCK_CLOCK_FONTS, 0);
+                Settings.System.LOCK_CLOCK_FONTS, 12);
     }
 
     public void refreshTime() {
@@ -404,9 +404,9 @@ public class KeyguardStatusView extends GridLayout {
         mShowDate = Settings.System.getIntForUser(resolver,
                 Settings.System.HIDE_LOCKSCREEN_DATE, 1, UserHandle.USER_CURRENT) == 1;
         mClockSelection = Settings.System.getIntForUser(resolver,
-                Settings.System.LOCKSCREEN_CLOCK_SELECTION, 0, UserHandle.USER_CURRENT);
+                Settings.System.LOCKSCREEN_CLOCK_SELECTION, 3, UserHandle.USER_CURRENT);
         mDateSelection = Settings.System.getIntForUser(resolver,
-                Settings.System.LOCKSCREEN_DATE_SELECTION, 0, UserHandle.USER_CURRENT);
+                Settings.System.LOCKSCREEN_DATE_SELECTION, 2, UserHandle.USER_CURRENT);
 
         mLockClockFontSize = Settings.System.getIntForUser(resolver,
                 Settings.System.LOCKCLOCK_FONT_SIZE, getResources().getDimensionPixelSize(R.dimen.widget_big_font_size), UserHandle.USER_CURRENT);
@@ -415,9 +415,9 @@ public class KeyguardStatusView extends GridLayout {
         mLockOwnerFontSize = Settings.System.getIntForUser(resolver,
                 Settings.System.LOCKOWNER_FONT_SIZE, getResources().getDimensionPixelSize(R.dimen.widget_label_font_size), UserHandle.USER_CURRENT);
         int dateFont = Settings.System.getIntForUser(resolver,
-                Settings.System.LOCK_DATE_FONTS, 4, UserHandle.USER_CURRENT);
+                Settings.System.LOCK_DATE_FONTS, 13, UserHandle.USER_CURRENT);
         int LockOwnerFont = Settings.System.getIntForUser(resolver,
-                Settings.System.LOCK_OWNER_FONTS, 4, UserHandle.USER_CURRENT);
+                Settings.System.LOCK_OWNER_FONTS, 13, UserHandle.USER_CURRENT);
 
         if (mClockView != null) {
             if (mLockClockFontSize != getResources().getDimensionPixelSize(R.dimen.widget_big_font_size)) {
