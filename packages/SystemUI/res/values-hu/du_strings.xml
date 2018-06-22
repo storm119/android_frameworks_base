@@ -55,6 +55,7 @@
   <!-- QS Tiles -->
   <string name="quick_settings_reboot_label">Újraindítás</string>
   <string name="quick_settings_reboot_recovery_label">Recovery</string>
+  <string name="quick_settings_reboot_bootloader_label">Bootloader</string>
   <string name="quick_settings_poweroff_label">Kikapcsolás</string>
   <string name="quick_settings_screenshot_label">Képernyőmentés</string>
   <string name="quick_settings_region_screenshot_label">Részleges képernyőmentés</string>
@@ -108,6 +109,10 @@
   <string name="keyguard_plugged_in_turbo_power_charging">TurboPower csatlakoztatva</string>
   <string name="keyguard_plugged_in_turbo_charging">Turbótöltés</string>
   <!-- Smart pixels QS tile -->
-  <string name="quick_settings_smart_pixels">Smart pixels</string>
-  <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+  <string name="quick_settings_smart_pixels">Intelligens pixelek</string>
+  <string name="quick_settings_smart_pixels_on_power_save">Intelligens pixelek automatikus engedélyezése</string>
+  <!-- Text to use when the number in a notification info is too large
+         (greater than status_bar_notification_info_maxnum, defined in
+         values/config.xml) and must be truncated.
+         [CHAR LIMIT=4] -->
 </resources>
