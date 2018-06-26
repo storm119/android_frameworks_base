@@ -18,23 +18,19 @@ package com.android.systemui.recents.views;
 
 import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.MemoryInfo;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
-import android.app.ActivityManager;
-import android.app.ActivityManager.MemoryInfo;
 import android.app.ActivityOptions.OnAnimationStartedListener;
-import android.app.ActivityManager;
-import android.app.ActivityManager.MemoryInfo;
-import android.content.Context;
-import android.content.ContentResolver;
-import android.content.res.Resources;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.content.ContentResolver;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
