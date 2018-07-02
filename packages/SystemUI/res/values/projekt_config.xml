@@ -16,7 +16,7 @@
 <resources>
     <item name="qs_background_opacity" format="float" type="integer">0.87</item>
 
-    <!-- Config to enable/diaable qs tile tinting -->
-    <bool name="config_enable_qs_tile_tinting">false</bool>
+    <!-- Config to enable/disable/unavailabe qs tile tinting -->
+    <bool name="config_enable_qs_tile_tinting">true</bool>
 
 </resources>
