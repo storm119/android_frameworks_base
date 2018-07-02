@@ -108,7 +108,7 @@ public class CPUInfoTile extends QSTileImpl<BooleanState> {
 
     @Override
     public int getMetricsCategory() {
-        return MetricsEvent.DIRTYTWEAKS;
+        return MetricsEvent.CUSTOM_QUICK_TILES;
     }
 
     @Override
