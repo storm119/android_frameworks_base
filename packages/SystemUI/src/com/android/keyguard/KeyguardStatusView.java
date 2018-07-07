@@ -515,6 +515,14 @@ public class KeyguardStatusView extends GridLayout {
                 mDateView.setBackground(getResources().getDrawable(R.drawable.date_border_outline_accent));
                 mDateView.setPadding(40,20,40,20);
                 break;
+            case 9: // semi-transparent accent outline
+                mDateView.setBackground(getResources().getDrawable(R.drawable.date_box_str_accent_border));
+                mDateView.setPadding(40,20,40,20);
+                break;
+            case 10: // semi-transparent accent outline (round)
+                mDateView.setBackground(getResources().getDrawable(R.drawable.date_str_accent_border));
+                mDateView.setPadding(40,20,40,20);
+                break;
         }
 
         updateVisibilities();
