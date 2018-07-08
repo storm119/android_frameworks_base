@@ -4665,12 +4665,6 @@ public final class Settings {
          */
         public static final String INCALL_NOTIFICATIONS_VIBRATE = "incall_notifications_vibrate";
 
-         /** 
-         * Dim volume dialog 
-         * @hide 
-         */ 
-        public static final String TRANSPARENT_VOLUME_DIALOG_DIM = "transparent_volume_dialog_dim"; 
-
         /**
          * Double tap on lockscreen to sleep
          * @hide
