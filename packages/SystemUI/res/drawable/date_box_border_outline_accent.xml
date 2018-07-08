@@ -6,7 +6,7 @@
         android:color="#00FFFFFF" />
     <stroke
         android:width="2dp"
-        android:color="@*android:color/accent_material_light" />
+        android:color="@*android:color/accent_device_default_light" />
     <corners
         android:radius="2dp" />
 
