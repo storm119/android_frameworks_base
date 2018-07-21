@@ -21,7 +21,7 @@
     android:height="24dp"
     android:viewportHeight="48"
     android:tint="?android:attr/colorControlNormal" >
-	<group
+    <group
         android:name="caret_5" >
         <group android:name="collapse">
             <path
