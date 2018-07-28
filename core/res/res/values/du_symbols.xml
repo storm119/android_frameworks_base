@@ -65,6 +65,7 @@
   <java-symbol type="color" name="power_menu_advanced_recovery" />
   <java-symbol type="color" name="power_menu_advanced_system_restart_ui" />
   <java-symbol type="color" name="power_menu_screenshot" />
+  <java-symbol type="color" name="power_menu_airplane" />
 
   <!-- IMS -->
   <java-symbol type="string" name="config_optionalPackageVerifierName" />
