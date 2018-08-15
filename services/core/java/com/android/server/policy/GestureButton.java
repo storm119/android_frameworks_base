@@ -42,7 +42,7 @@ import android.view.WindowManagerPolicy.PointerEventListener;
 import android.view.WindowManagerPolicy.WindowState;
 import android.view.inputmethod.InputMethodManagerInternal;
 
-import com.android.internal.util.omni.OmniUtils;
+import com.android.internal.util.du.Utils;
 import com.android.server.LocalServices;
 import com.android.server.statusbar.StatusBarManagerInternal;
 
@@ -265,7 +265,7 @@ public class GestureButton implements PointerEventListener {
     }
 
     private void triggerGestureVirtualKeypress(int keyCode) {
-        OmniUtils.sendKeycode(keyCode);
+        Utils.sendKeycode(keyCode);
     }
 
     void navigationBarPosition(int displayWidth, int displayHeight, int displayRotation) {
