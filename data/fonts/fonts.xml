@@ -201,6 +201,9 @@
     <family name="unionfont">
         <font weight="300" style="normal">Union-Regular.ttf</font>
     </family>
+    <family name="sammy-sys">
+        <font weight="300" style="normal">Sammy.ttf</font>
+    </family>
 
     <!-- fallback fonts -->
     <family lang="und-Arab" variant="elegant">
