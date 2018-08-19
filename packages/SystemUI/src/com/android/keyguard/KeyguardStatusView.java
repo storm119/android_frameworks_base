@@ -618,6 +618,9 @@ public class KeyguardStatusView extends GridLayout {
         if (lockClockFont == 26) {
             mClockView.setTypeface(Typeface.create("unionfont", Typeface.NORMAL));
         }
+        if (lockClockFont == 27) {
+            mClockView.setTypeface(Typeface.create("sammy-sys", Typeface.NORMAL));
+        }
 
         // Pimp my LockScreen date & alarm Fonts
         if (lockDateFont == 0) {
@@ -727,6 +730,10 @@ public class KeyguardStatusView extends GridLayout {
         if (lockDateFont == 26) {
             mDateView.setTypeface(Typeface.create("themeable-date", Typeface.NORMAL));
             mAlarmStatusView.setTypeface(Typeface.create("themeable-date", Typeface.NORMAL));
+        }
+        if (lockDateFont == 27) {
+            mDateView.setTypeface(Typeface.create("sammy-sys", Typeface.NORMAL));
+            mAlarmStatusView.setTypeface(Typeface.create("sammy-sys", Typeface.NORMAL));
         }
 
         // Pimp my LockScreen ownerInfo Fonts
