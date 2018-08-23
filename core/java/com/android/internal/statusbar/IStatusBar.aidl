@@ -131,4 +131,9 @@ oneway interface IStatusBar
     void handleSystemKey(in int key);
 
     void showShutdownUi(boolean isReboot, String reason);
+
+    /**
+     * Notifies the status bar that a new rotation suggestion is available.
+     */
+    void onProposedRotationChanged(int rotation, boolean isValid);
 }

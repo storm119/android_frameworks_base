@@ -59,6 +59,7 @@ import android.view.IRotationWatcher.Stub;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -91,10 +92,13 @@ import com.android.systemui.stackdivider.Divider;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.CommandQueue.Callbacks;
 import com.android.systemui.statusbar.policy.AccessibilityManagerWrapper;
+import com.android.systemui.statusbar.policy.ActivityManagerWrapper;
 import com.android.systemui.statusbar.policy.KeyButtonView;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import com.android.systemui.statusbar.policy.KeyguardMonitor.Callback;
+import com.android.systemui.statusbar.policy.RotationLockController;
 import com.android.systemui.statusbar.stack.StackStateAnimator;
+import com.android.systemui.statusbar.policy.TaskStackChangeListener;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -117,6 +121,8 @@ public class NavigationBarFragment extends Fragment implements Callbacks, Naviga
     public static final int NAVIGATION_MODE_DEFAULT = 0;
     public static final int NAVIGATION_MODE_SMARTBAR = 1;
     public static final int NAVIGATION_MODE_FLING = 2;
+
+    private static final int ROTATE_SUGGESTION_TIMEOUT_MS = 4000;
 
     protected Navigator mNavigationBarView = null;
     protected AssistManager mAssistManager;
@@ -158,6 +164,10 @@ public class NavigationBarFragment extends Fragment implements Callbacks, Naviga
     private boolean needsBarRefresh = false;
     private boolean mIsAttached;
 
+    private RotationLockController mRotationLockController;
+    private TaskStackListenerImpl mTaskStackListener;
+    private final Runnable mRemoveRotationProposal = () -> setRotateSuggestionButtonState(false);
+
     // ----- Fragment Lifecycle Callbacks -----
 
     @Override
@@ -191,6 +201,12 @@ public class NavigationBarFragment extends Fragment implements Callbacks, Naviga
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
         }
+
+        mRotationLockController = Dependency.get(RotationLockController.class);
+        // Register the task stack listener
+        mTaskStackListener = new TaskStackListenerImpl();
+        ActivityManagerWrapper.getInstance().registerTaskStackListener(mTaskStackListener);
+
         mConfiguration = new Configuration();
         mConfiguration.updateFrom(getContext().getResources().getConfiguration());
         mPulseController = new PulseController(getContext(), new Handler());
@@ -217,6 +233,9 @@ public class NavigationBarFragment extends Fragment implements Callbacks, Naviga
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
         }
+
+        // Unregister the task stack listener
+        ActivityManagerWrapper.getInstance().unregisterTaskStackListener(mTaskStackListener);
     }
 
     @Override
@@ -453,6 +472,39 @@ public class NavigationBarFragment extends Fragment implements Callbacks, Naviga
     public void screenPinningStateChanged(boolean enabled) {
         mScreenPinningEnabled = enabled;
         changeNavigator();
+    }
+
+    @Override
+    public void onRotationProposal(final int rotation, boolean isValid) {
+        // This method will be called on rotation suggestion changes even if the proposed rotation
+        // is not valid for the top app. Use invalid rotation choices as a signal to remove the
+        // rotate button if shown.
+
+        if (!isValid) {
+            setRotateSuggestionButtonState(false);
+            return;
+        }
+
+        Handler h = getView().getHandler();
+        if (rotation == mWindowManager.getDefaultDisplay().getRotation()) {
+            // Use this as a signal to remove any current suggestions
+            h.removeCallbacks(mRemoveRotationProposal);
+            setRotateSuggestionButtonState(false);
+        } else {
+            if (mNavigationBarView != null) {
+                mNavigationBarView.setLastRotation(rotation); // Remember rotation for click
+            }
+            setRotateSuggestionButtonState(true);
+            h.removeCallbacks(mRemoveRotationProposal); // Stop any pending removal
+            h.postDelayed(mRemoveRotationProposal,
+                    ROTATE_SUGGESTION_TIMEOUT_MS); // Schedule timeout
+        }
+    }
+
+    public void setRotateSuggestionButtonState(final boolean visible) {
+        if (mNavigationBarView != null) {
+            mNavigationBarView.setRotateSuggestionButtonState(visible, false);
+        }
     }
 
     public void updateNavbarOverlay(Resources res) {
@@ -773,6 +825,16 @@ public class NavigationBarFragment extends Fragment implements Callbacks, Naviga
             // window in response to the orientation change.
             Handler h = getView().getHandler();
             Message msg = Message.obtain(h, () -> {
+                // If the screen rotation changes while locked, potentially update lock to flow with
+                // new screen rotation and hide any showing suggestions.
+                if (mRotationLockController.isRotationLocked()) {
+                    if (shouldOverrideUserLockPrefs(rotation)) {
+                        mRotationLockController.setRotationLockedAtAngle(true, rotation);
+                    }
+                    if (mNavigationBarView != null) {
+                        mNavigationBarView.setRotateSuggestionButtonState(false, true);
+                    }
+                }
                 if (mNavigationBarView != null
                         && mNavigationBarView.needsReorient(rotation)) {
                     repositionNavigationBar();
@@ -780,6 +842,12 @@ public class NavigationBarFragment extends Fragment implements Callbacks, Naviga
             });
             msg.setAsynchronous(true);
             h.sendMessageAtFrontOfQueue(msg);
+        }
+
+        private boolean shouldOverrideUserLockPrefs(final int rotation) {
+            // Only override user prefs when returning to portrait.
+            // Don't let apps that force landscape or 180 alter user lock.
+            return rotation == Surface.ROTATION_0;
         }
     };
 
@@ -890,6 +958,27 @@ public class NavigationBarFragment extends Fragment implements Callbacks, Naviga
                     Settings.Secure.NAVIGATION_BAR_MODE, NAVIGATION_MODE_DEFAULT,
                     UserHandle.USER_CURRENT);
             changeNavigator();
+        }
+    }
+
+    class TaskStackListenerImpl extends TaskStackChangeListener {
+        // Invalidate any rotation suggestion on task change or activity orientation change
+        // Note: all callbacks happen on main thread
+         @Override
+        public void onTaskStackChanged() {
+            setRotateSuggestionButtonState(false);
+        }
+         @Override
+        public void onTaskRemoved(int taskId) {
+            setRotateSuggestionButtonState(false);
+        }
+         @Override
+        public void onTaskMovedToFront(int taskId) {
+            setRotateSuggestionButtonState(false);
+        }
+         @Override
+        public void onActivityRequestedOrientationChanged(int taskId, int requestedOrientation) {
+            setRotateSuggestionButtonState(false);
         }
     }
 
