@@ -89,6 +89,13 @@ public interface StatusBarManagerInternal {
 
     boolean showShutdownUi(boolean isReboot, String requestString);
 
+    /**
+     * Show a rotation suggestion that a user may approve to rotate the screen.
+     *
+     * @param rotation rotation suggestion
+     */
+    void onProposedRotationChanged(int rotation, boolean isValid);
+
     public interface GlobalActionsListener {
         /**
          * Called when sysui starts and connects its status bar, or when the status bar binder

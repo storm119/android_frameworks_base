@@ -1256,23 +1256,40 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     class MyOrientationListener extends WindowOrientationListener {
-        private final Runnable mUpdateRotationRunnable = new Runnable() {
+        private SparseArray<Runnable> mRunnableCache;
+         MyOrientationListener(Context context, Handler handler) {
+            super(context, handler);
+            mRunnableCache = new SparseArray<>(5);
+        }
+         private class UpdateRunnable implements Runnable {
+            private final int mRotation;
+            UpdateRunnable(int rotation) {
+                mRotation = rotation;
+            }
+
             @Override
             public void run() {
                 // send interaction hint to improve redraw performance
                 mPowerManagerInternal.powerHint(PowerHint.INTERACTION, 0);
-                updateRotation(false);
+                if (isRotationChoiceEnabled()) {
+                    final boolean isValid = isValidRotationChoice(mCurrentAppOrientation,
+                            mRotation);
+                    sendProposedRotationChangeToStatusBarInternal(mRotation, isValid);
+                } else {
+                    updateRotation(false);
+                }
             }
-        };
-
-        MyOrientationListener(Context context, Handler handler) {
-            super(context, handler);
         }
 
         @Override
         public void onProposedRotationChanged(int rotation) {
             if (localLOGV) Slog.v(TAG, "onProposedRotationChanged, rotation=" + rotation);
-            mHandler.post(mUpdateRotationRunnable);
+            Runnable r = mRunnableCache.get(rotation, null);
+            if (r == null){
+                r = new UpdateRunnable(rotation);
+                mRunnableCache.put(rotation, r);
+            }
+            mHandler.post(r);
         }
     }
     MyOrientationListener mOrientationListener;
@@ -1438,7 +1455,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // orientation for a little bit, which can cause orientation
             // changes to lag, so we'd like to keep it always on.  (It will
             // still be turned off when the screen is off.)
-            return false;
+            // When locked we can provide rotation suggestions users can approve to change the
+            // current screen rotation. To do this the sensor needs to be running.
+            return mSupportAutoRotation;
         }
         return mSupportAutoRotation;
     }
@@ -7070,6 +7089,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     /**
+     * Notify the StatusBar that system rotation suggestion has changed.
+     */
+    private void sendProposedRotationChangeToStatusBarInternal(int rotation, boolean isValid) {
+        StatusBarManagerInternal statusBar = getStatusBarManagerInternal();
+        if (statusBar != null) {
+            statusBar.onProposedRotationChanged(rotation, isValid);
+        }
+    }
+
+    /**
      * Returns true if the key can have global actions attached to it.
      * We reserve all power management keys for the system since they require
      * very careful handling.
@@ -8153,6 +8182,76 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     @Override
     public void setRotationLw(int rotation) {
         mOrientationListener.setCurrentRotation(rotation);
+    }
+
+    public boolean isRotationChoiceEnabled() {
+        // Rotation choice is only shown when the user is in locked mode.
+        if (mUserRotationMode != WindowManagerPolicy.USER_ROTATION_LOCKED) return false;
+        // We should only enable rotation choice if the rotation isn't forced by the lid, dock,
+        // demo, hdmi, vr, etc mode
+        // Determine if the rotation is currently forced
+        if (mForceDefaultOrientation) {
+            return false; // Rotation is forced to default orientation
+         } else if (mLidState == LID_OPEN && mLidOpenRotation >= 0) {
+            return false; // Rotation is forced mLidOpenRotation
+         } else if (mDockMode == Intent.EXTRA_DOCK_STATE_CAR && !mCarDockEnablesAccelerometer) {
+            return false; // Rotation forced to mCarDockRotation
+         } else if ((mDockMode == Intent.EXTRA_DOCK_STATE_DESK
+                || mDockMode == Intent.EXTRA_DOCK_STATE_LE_DESK
+                || mDockMode == Intent.EXTRA_DOCK_STATE_HE_DESK)
+                && !mDeskDockEnablesAccelerometer) {
+            return false; // Rotation forced to mDeskDockRotation
+         } else if (mHdmiPlugged && mDemoHdmiRotationLock) {
+            return false; // Rotation forced to mDemoHdmiRotation
+         } else if (mHdmiPlugged && mDockMode == Intent.EXTRA_DOCK_STATE_UNDOCKED
+                && mUndockedHdmiRotation >= 0) {
+            return false; // Rotation forced to mUndockedHdmiRotation
+         } else if (mDemoRotationLock) {
+            return false; // Rotation forced to mDemoRotation
+         } else if (mPersistentVrModeEnabled) {
+            return false; // Rotation forced to mPortraitRotation
+         } else if (!mSupportAutoRotation) {
+            return false;
+        }
+        // Rotation isn't forced, enable choice
+        return true;
+    }
+
+     public boolean isValidRotationChoice(int orientation, final int preferredRotation) {
+        // Determine if the given app orientation can be chosen and, if so, if it is compatible
+        // with the provided rotation choice
+        switch (orientation) {
+            case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
+            case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
+            case ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
+            case ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
+            case ActivityInfo.SCREEN_ORIENTATION_LOCKED:
+                return false; // Forced into a particular rotation, no user choice
+             case ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE:
+            case ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT:
+            case ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR:
+            case ActivityInfo.SCREEN_ORIENTATION_SENSOR:
+                return false; // Sensor overrides user choice
+             case ActivityInfo.SCREEN_ORIENTATION_NOSENSOR:
+                // TODO Can sensor be used to indirectly determine the orientation?
+                return false;
+             case ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE:
+                // If the user has locked sensor-based rotation, this behaves the same as landscape
+                return false; // User has locked the rotation, will behave as LANDSCAPE
+            case ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT:
+                // If the user has locked sensor-based rotation, this behaves the same as portrait
+                return false; // User has locked the rotation, will behave as PORTRAIT
+            case ActivityInfo.SCREEN_ORIENTATION_USER:
+                // Works with any rotation except upside down
+                return (preferredRotation >= 0) && (preferredRotation != mUpsideDownRotation);
+            case ActivityInfo.SCREEN_ORIENTATION_FULL_USER:
+                // Works with any of the 4 rotations
+                return preferredRotation >= 0;
+             default:
+                // TODO: how to handle SCREEN_ORIENTATION_BEHIND, UNSET?
+                // For UNSPECIFIED use preferred orientation matching SCREEN_ORIENTATION_USER
+                return (preferredRotation >= 0) && (preferredRotation != mUpsideDownRotation);
+        }
     }
 
     private boolean isLandscapeOrSeascape(int rotation) {
