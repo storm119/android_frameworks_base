@@ -158,11 +158,13 @@
         <item>com.instagram.android</item>
         <item>com.facebook.katana</item>
         <item>com.facebook.lite</item>
+        <item>com.facebook.orca</item>
         <item>com.spotify.music</item>
         <item>com.linkedin.android</item>
         <item>com.Slack</item>
         <item>org.mozilla.fennec_aurora</item>
         <item>com.whatsapp.whatsapp</item>
+        <item>com.tencent.mm</item>
     </string-array>
 
     <!-- EdgeGesture service -->
