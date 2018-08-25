@@ -151,20 +151,35 @@
         <item>com.gbwhatsapp</item>
         <item>com.yowhatsapp</item>
         <item>com.whatsapp.plus</item>
+        <item>com.whatsapp.whatsapp</item>
         <item>org.telegram.messenger</item>
         <item>org.telegram.plus</item>
         <item>org.thunderdog.challegram</item>
         <item>com.snapchat.android</item>
+        <item>com.snapchat.android.LandingPageActivity</item>
         <item>com.instagram.android</item>
+        <item>com.instagram.android.MainTabActivity</item>
         <item>com.facebook.katana</item>
+        <item>com.facebook.katana.LoginActivity</item>
         <item>com.facebook.lite</item>
         <item>com.facebook.orca</item>
+        <item>com.facebook.orca.StartScreenActivity</item>
+        <item>com.google.android.gms</item>
+        <item>com.google.android.inputmethod.latin</item>
+        <item>com.google.android.apps.maps</item>
+        <item>com.google.android.apps.plus</item>
+        <item>com.android.vending</item>
+        <item>com.android.chrome</item>
+        <item>com.spotify</item>
         <item>com.spotify.music</item>
+        <item>com.spotify.music.MainActivity</item>
+        <item>com.spotify.music.Spotify</item>
         <item>com.linkedin.android</item>
         <item>com.Slack</item>
+        <item>org.mozilla.firefox</item>
         <item>org.mozilla.fennec_aurora</item>
-        <item>com.whatsapp.whatsapp</item>
         <item>com.tencent.mm</item>
+        <item>com.amazon.mShop.android.shopping</item>
     </string-array>
 
     <!-- EdgeGesture service -->
